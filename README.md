@@ -1,6 +1,6 @@
-# fighting_game
+# Tekken game clone
 
-This template should help get you started developing with Vue 3 in Vite.
+A web application inspired by the famous fighting game Tekken.
 
 ## Recommended IDE Setup
 
