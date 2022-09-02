@@ -3,22 +3,87 @@ import { defineStore } from "pinia";
 export const Store = defineStore({
   id: "gameSettings",
   state: () => ({
-    player: {
-      health: 100,
+    window: {
+      width: 1080,
+      height: 720,
     },
-    enemy: {
-      health: 100,
+    game: {
+      players: {
+        player: {
+          name: "player 1",
+          position: {
+            x: 0,
+            y: 0,
+          },
+          velocity: {
+            x: 0,
+            y: 0,
+          },
+          keys: {
+            lastKey: null,
+            left: "a",
+            right: "d",
+            up: "w",
+            attack: "s",
+          },
+          width: 50,
+          height: 150,
+          lastKey: null,
+          color: "blue",
+          gravity: 0.7,
+          isAttacking: false,
+          health: 100,
+          attackBox: {
+            position: {
+              x: 100,
+              y: 100,
+            },
+            offset: 0,
+            width: 100,
+            height: 50,
+          },
+        },
+        enemy: {
+          name: "player 2",
+          position: {
+            x: 1030,
+            y: 0,
+          },
+          velocity: {
+            x: 0,
+            y: 0,
+          },
+          keys: {
+            lastKey: null,
+            left: "ArrowLeft",
+            right: "ArrowRight",
+            up: "ArrowUp",
+            attack: "Insert",
+          },
+          width: 50,
+          height: 150,
+          lastKey: null,
+          color: "red",
+          gravity: 0.7,
+          isAttacking: false,
+          health: 100,
+          attackBox: {
+            position: {
+              x: 100,
+              y: 100,
+            },
+            offset: -50,
+            width: 100,
+            height: 50,
+          },
+        },
+      },
     },
   }),
+
   // getters: {
   // },
-  actions: {
-    decreaseLife(user) {
-      if (user == "player") {
-        this.player.health -= 10;
-      } else if (user == "enemy") {
-        this.enemy.health -= 10;
-      }
-    },
-  },
+
+  // actions: {
+  // },
 });

@@ -7,7 +7,7 @@
       low="30"
       high="50"
       optimum="70"
-      :value="store.player.health"
+      :value="store.game.players.player.health"
     />
     <meter
       class="health"
@@ -16,7 +16,7 @@
       low="30"
       high="50"
       optimum="70"
-      :value="store.enemy.health"
+      :value="store.game.players.enemy.health"
     />
   </div>
 </template>
