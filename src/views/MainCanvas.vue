@@ -1,7 +1,7 @@
 <template>
   <HealthBar />
-  <div class="full-flex">
-    <canvas class="canvas"></canvas>
+  <div class="full-flex top-12">
+    <canvas :width="store.window.width" :height="store.window.height"></canvas>
   </div>
 </template>
 
@@ -25,19 +25,22 @@ import {
 // ==============================
 const store = Store();
 
-
+// Canvas images
+const background = new Image();
+background.src = 'src/assets/img/background/background.png';
+// const shop = new Image();
+// shop.src = 'src/assets/img/decorations/shop.png';
+// let shop_width = 708;
+// let shop_height = 128;
 // ==============================
 // Life cycle
 // ==============================
 
-onMounted(() => {
+onMounted(() => {  
   const canvas = document.querySelector("canvas");
   const ctx = canvas.getContext("2d");
   canvas.width = store.window.width;
   canvas.height = store.window.height;
-
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, store.window.width, store.window.height);
 
   setInterval(updateCanvas, 10, ctx);
 });
@@ -49,9 +52,9 @@ onMounted(() => {
 
 function updateCanvas(ctx) {
 
-  // Clean the canvas 
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, store.window.width, store.window.height);
+  // Set canvas background 
+  ctx.drawImage(background, 0, 0);
+  // ctx.drawImage(shop(), 650, 193, shop_width*2.5, shop_height*2.5);
 
   // Draw the players (handle: gravity, attackBox, jumping, left/right, screen borders,)
   draw(ctx, store.game.players.player);
@@ -76,3 +79,7 @@ function updateCanvas(ctx) {
 handleKeyboardEvents(store.game.players.enemy);
 handleKeyboardEvents(store.game.players.player);
 </script>
+
+<style lang="scss" scoped>
+
+</style>

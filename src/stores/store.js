@@ -5,9 +5,13 @@ export const Store = defineStore({
   state: () => ({
     window: {
       width: 1080,
-      height: 720,
+      height: 608,
     },
     game: {
+      settings: {
+        fightTime: -1,
+        gameOver: false
+      },
       players: {
         player: {
           name: "player 1",

@@ -5,6 +5,7 @@
   padding: 0;
   box-sizing: content-box;
   overflow: hidden;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .full-flex {
@@ -13,4 +14,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-6 {
+  margin-top: 6px;
+}
+
+.top-12 {
+  margin-top: 12px;
+}
+
+.bottom-6 {
+  margin-bottom: 6px;
+}
+
+.bottom-12 {
+  margin-bottom: 12px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 30px;
 }

@@ -20,7 +20,7 @@ export function draw(ctx, user) {
   handleAttackBox(user);
 
   // Handle jumping behaviour
-  if (user.position.y + user.height + user.velocity.y >= 720) {
+  if (user.position.y + user.height + user.velocity.y >= 510) {
     user.velocity.y = 0;
   } else {
     user.velocity.y += user.gravity;
@@ -50,7 +50,7 @@ export function handleKeyboardEvents(user) {
         break;
       // Up
       case user.keys.up:
-        user.position.y > 565 && user.position.y < 575
+        user.position.y > 355 && user.position.y < 365
           ? (user.velocity.y = -20)
           : (user.velocity.y += user.gravity);
         break;
