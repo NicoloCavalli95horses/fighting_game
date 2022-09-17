@@ -1,4 +1,5 @@
 <template>
+  <div class="relative"></div>
   <div class="wrapper top-12">
     <meter
       class="health"
@@ -47,6 +48,7 @@ watch(
   () => store.game.players.player.health,
   () => {
     if (store.game.players.player.health == 0) {
+      store.game.players.player.isDead = true;
       console.log("Player 1 died");
     }
   }
@@ -56,6 +58,7 @@ watch(
   () => store.game.players.enemy.health,
   () => {
     if (store.game.players.enemy.health == 0) {
+      store.game.players.enemy.isDead = true;
       console.log("Player 2 died");
     }
   }
@@ -63,6 +66,9 @@ watch(
 </script>
 
 <style lang="scss">
+.relative {
+  position: relative;
+}
 .wrapper {
   position: absolute;
   width: 100%;

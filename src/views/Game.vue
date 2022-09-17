@@ -1,20 +1,20 @@
 <template>
   <HealthBar />
-  <div class="full-flex top-12">
-    <canvas :width="store.window.width" :height="store.window.height"></canvas>
-  </div>
+  <canvas :width="store.window.width" :height="store.window.height"></canvas>
 </template>
 
 <script setup>
 // ==============================
 // Imports
 // ==============================
-import { onMounted } from "@vue/runtime-core";
+import { onMounted, computed } from "@vue/runtime-core";
 import { Store } from "@/stores/store";
 import HealthBar from "../components/HealthBar.vue";
 import { 
   draw,
   detectCollision,
+  drawShop,
+  drawBackground,
   handleKeyboardEvents,
   setDirection,
 } from "../composables/utils/draw_utils.js";
@@ -26,12 +26,8 @@ import {
 const store = Store();
 
 // Canvas images
-const background = new Image();
-background.src = 'src/assets/img/background/background.png';
-// const shop = new Image();
-// shop.src = 'src/assets/img/decorations/shop.png';
-// let shop_width = 708;
-// let shop_height = 128;
+let frame = 0;                   // Track canvas frame iteration
+
 // ==============================
 // Life cycle
 // ==============================
@@ -53,12 +49,12 @@ onMounted(() => {
 function updateCanvas(ctx) {
 
   // Set canvas background 
-  ctx.drawImage(background, 0, 0);
-  // ctx.drawImage(shop(), 650, 193, shop_width*2.5, shop_height*2.5);
+  drawBackground(ctx, store.window);
+  drawShop(ctx, frame);
 
   // Draw the players (handle: gravity, attackBox, jumping, left/right, screen borders,)
-  draw(ctx, store.game.players.player);
-  draw(ctx, store.game.players.enemy);
+  draw(ctx, store.game.players.player, frame, store.window);
+  draw(ctx, store.game.players.enemy, frame, store.window);
 
   // Move the attackBox in order to make the players always face each other
   setDirection(store.game.players.player, store.game.players.enemy);
@@ -66,20 +62,26 @@ function updateCanvas(ctx) {
   // Handle collisions and subtract health 
   if (detectCollision(store.game.players.player, store.game.players.enemy) && store.game.players.player.isAttacking) {
     store.game.players.player.isAttacking = false;
-    store.game.players.enemy.health -= 10;
+    store.game.players.enemy.health -= store.game.players.player.strenght;
   }
 
   if (detectCollision(store.game.players.enemy, store.game.players.player) && store.game.players.enemy.isAttacking) {
     store.game.players.enemy.isAttacking = false;
-    store.game.players.player.health -= 10;
+    store.game.players.player.health -= store.game.players.enemy.strenght;
   }
+
+  frame ++
 }
 
 // Listen to keyboard event (keys are defined in the store)
-handleKeyboardEvents(store.game.players.enemy);
-handleKeyboardEvents(store.game.players.player);
+handleKeyboardEvents(store.game.players.enemy, frame);
+handleKeyboardEvents(store.game.players.player, frame);
+
 </script>
 
 <style lang="scss" scoped>
+  // canvas {
+    // transform: scale(1.6);
+  // }
 
 </style>
