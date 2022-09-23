@@ -60,13 +60,15 @@ function updateCanvas(ctx) {
   setDirection(store.game.players.player, store.game.players.enemy);
 
   // Handle collisions and subtract health 
-  if (detectCollision(store.game.players.player, store.game.players.enemy) && store.game.players.player.isAttacking) {
-    store.game.players.player.isAttacking = false;
+  if (detectCollision(store.game.players.player, store.game.players.enemy) && store.game.players.player.canAttack ) {
+    store.game.players.player.canAttack = false;
+    store.game.players.enemy.state = 'hit';
     store.game.players.enemy.health -= store.game.players.player.strenght;
   }
 
-  if (detectCollision(store.game.players.enemy, store.game.players.player) && store.game.players.enemy.isAttacking) {
-    store.game.players.enemy.isAttacking = false;
+  if (detectCollision(store.game.players.enemy, store.game.players.player) && store.game.players.enemy.canAttack) {
+    store.game.players.enemy.canAttack = false;
+    store.game.players.player.state = 'hit';
     store.game.players.player.health -= store.game.players.enemy.strenght;
   }
 
@@ -74,14 +76,10 @@ function updateCanvas(ctx) {
 }
 
 // Listen to keyboard event (keys are defined in the store)
-handleKeyboardEvents(store.game.players.enemy, frame);
-handleKeyboardEvents(store.game.players.player, frame);
+handleKeyboardEvents(store.game.players.enemy);
+handleKeyboardEvents(store.game.players.player);
 
 </script>
 
 <style lang="scss" scoped>
-  // canvas {
-    // transform: scale(1.6);
-  // }
-
 </style>
