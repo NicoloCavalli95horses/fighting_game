@@ -1,7 +1,4 @@
 export function draw(ctx, user, frame, window) {
-  // Draw the user
-  // ctx.fillStyle = user.color;
-  // ctx.fillRect(user.position.x, user.position.y, user.width, user.height);
 
   // Apply gravity
   user.position.y += user.velocity.y;
@@ -21,8 +18,10 @@ export function draw(ctx, user, frame, window) {
     drawAnimation(ctx, user, user.animation.jump, frame);
   } else if (user.state == "falling") {
     drawAnimation(ctx, user, user.animation.fall, frame);
-  } else if (user == "dead") {
-    drawAnimation(ctx, user, user.animation.death, frame);
+  } else if (user.state == "dead") {
+    drawOneTimeAnimation(ctx, user, user.animation.death, frame);
+  } else if (user.state == "hit") {
+    drawAnimation(ctx, user, user.animation.hit, frame, 20, true);
   } else {
     drawAnimation(ctx, user, user.animation.idle, frame);
   }
@@ -44,7 +43,11 @@ export function draw(ctx, user, frame, window) {
     user.state = "falling";
   } else if (user.health <= 0) {
     user.state = "dead";
-  } else if (user.state != "running" && user.state != "attacking") {
+  } else if (
+    user.state != "running" &&
+    user.state != "attacking" &&
+    user.state != "hit"
+  ) {
     user.state = "idle";
   }
 
@@ -61,16 +64,25 @@ export function draw(ctx, user, frame, window) {
 
 export function handleKeyboardEvents(user) {
   window.addEventListener("keydown", (e) => {
-    switch (e.key) {
+    if (user.isDead){
+      return
+    }
+    if (e.key !== user.lastKey) user.lastKey = e.key;
+
+    switch (user.lastKey) {
       // Left
       case user.keys.left:
-        user.velocity.x = -5;
-        user.state = "running";
+        if (user.state !== "attacking") {
+          user.velocity.x = -5;
+          user.state = "running";
+        }
         break;
       // Right
       case user.keys.right:
-        user.velocity.x = 5;
-        user.state = "running";
+        if (user.state !== "attacking") {
+          user.velocity.x = 5;
+          user.state = "running";
+        }
         break;
       // Up
       case user.keys.up:
@@ -78,13 +90,19 @@ export function handleKeyboardEvents(user) {
         break;
       // Attack
       case user.keys.attack:
-        user.state = "attacking";
+        if (user.state !== "running") {
+          user.state = "attacking";
+        }
         break;
     }
   });
 
   window.addEventListener("keyup", (e) => {
-    switch (e.key) {
+    if (user.isDead) {
+      return;
+    }
+    if (e.key !== user.lastKey) user.lastKey = e.key;
+    switch (user.lastKey) {
       // Left
       case user.keys.left:
         user.state = "idle";
@@ -101,18 +119,18 @@ export function handleKeyboardEvents(user) {
 
 export function setDirection(player, enemy) {
   // players always have to look at each other
-  if ( player.position.x >= enemy.position.x ) {
-     player.attackBox.offset = -200;
-     player.mirror = true;
+  if (player.position.x >= enemy.position.x) {
+    player.attackBox.offset = -200;
+    player.mirror = true;
   } else {
     player.attackBox.offset = 0;
     player.mirror = false;
   }
 
-  if ( enemy.position.x >= player.position.x ) {
-    enemy.attackBox.offset = -200
+  if (enemy.position.x >= player.position.x) {
+    enemy.attackBox.offset = -200;
     enemy.mirror = false;
-  } else { 
+  } else {
     enemy.attackBox.offset = 0;
     enemy.mirror = true;
   }
@@ -154,9 +172,9 @@ export function drawShop(ctx, frame) {
     SHOP_WIDTH / TOTAL_SHOP_FRAME,
     SHOP_HEIGHT,
     1100, // X position on the canvas of the whole image
-    300, // Y position on the canvas of the whole image
-    (SHOP_WIDTH / TOTAL_SHOP_FRAME) * 3, // WIDTH of the whole image
-    SHOP_HEIGHT * 3 // HEIGHT of the whole image
+    235, // Y position on the canvas of the whole image
+    (SHOP_WIDTH / TOTAL_SHOP_FRAME) * 3.6, // WIDTH of the whole image
+    SHOP_HEIGHT * 3.6 // HEIGHT of the whole image
   );
 
   if (frame % 15 === 0) {
@@ -179,10 +197,17 @@ export function drawBackground(ctx, window) {
 
 // =================== ANIMATION =====================
 
-function drawAnimation(ctx, user, animation, frame, speed = 15, attack = false) {
-  animation.image.src = user.mirror 
-    ? animation.src + '_rev.png'
-    : animation.src + '.png'
+function drawAnimation(
+  ctx,
+  user,
+  animation,
+  frame,
+  speed = 15,
+  one_animation_then_idle = false
+) {
+  animation.image.src = user.mirror
+    ? animation.src + "_rev.png"
+    : animation.src + ".png";
 
   ctx.drawImage(
     animation.image,
@@ -190,14 +215,14 @@ function drawAnimation(ctx, user, animation, frame, speed = 15, attack = false) 
     0,
     animation.width / animation.total,
     animation.height,
-    user.position.x - 275,
+    user.position.x - 330,
     user.position.y - 255,
     (animation.width / animation.total) * 3.5,
     animation.height * 3.5
   );
 
   if (frame % speed === 0) {
-    if (!attack) {
+    if (!one_animation_then_idle) {
       animation.i = animation.i == animation.total - 1 ? 1 : animation.i + 1;
     } else {
       if (animation.i == animation.total - 1) {
@@ -209,6 +234,37 @@ function drawAnimation(ctx, user, animation, frame, speed = 15, attack = false) 
         animation.i = animation.i + 1;
         user.canAttack = false;
       }
+    }
+  }
+}
+
+
+function drawOneTimeAnimation(
+  ctx,
+  user,
+  animation,
+  frame,
+  speed = 15,
+) {
+  animation.image.src = animation.src + ".png";
+
+  ctx.drawImage(
+    animation.image,
+    animation.i * (animation.width / animation.total),
+    0,
+    animation.width / animation.total,
+    animation.height,
+    user.position.x - 330,
+    user.position.y - 255,
+    (animation.width / animation.total) * 3.5,
+    animation.height * 3.5
+  );
+
+  if (frame % speed === 0) {
+    if (animation.i == animation.total - 1) {
+      return;
+    } else {
+      animation.i = animation.i + 1;
     }
   }
 }

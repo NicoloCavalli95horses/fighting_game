@@ -9,12 +9,12 @@ export const Store = defineStore({
     },
     game: {
       settings: {
-        fightTime: -1,
-        gameOver: false
+        fightTime: 60,
+        result: false,
       },
       players: {
         player: {
-          name: "player 1",
+          name: "Samurai Mack",
           position: {
             x: 50,
             y: 0,
@@ -29,14 +29,16 @@ export const Store = defineStore({
             up: "w",
             attack: "s",
           },
+          lastKey: null,
           width: 50,
           height: 150,
-          gravity: 0.7,
+          gravity: 0.4,
           state: 'idle',
           canAttack: true,
+          isDead: false,
           mirror: false,
           health: 100,
-          strenght: 5,
+          strenght: 8,
           attackBox: {
             position: {
               x: 100,
@@ -95,10 +97,18 @@ export const Store = defineStore({
               total: 6,
               i: 1,
             },
+            hit: {
+              image: new Image(),
+              src : 'src/assets/img/characters/samuraiMack/Hit',
+              width: 800,
+              height: 200,
+              total: 4,
+              i: 1,
+            },
           }
         },
         enemy: {
-          name: "player 2",
+          name: "Kenji",
           position: {
             x: (window.innerWidth - 100),
             y: 0,
@@ -113,11 +123,13 @@ export const Store = defineStore({
             up: "ArrowUp",
             attack: "ArrowDown",
           },
+          lastKey: null,
           width: 50,
           height: 150,
-          gravity: 0.7,
+          gravity: 0.5,
           state: 'idle',
           canAttack: true,
+          isDead: false,
           mirror: false,
           health: 100,
           strenght: 5,
@@ -177,6 +189,14 @@ export const Store = defineStore({
               width: 1400,
               height: 200,
               total: 7,
+              i: 1,
+            },
+            hit: {
+              image: new Image(),
+              src : 'src/assets/img/characters/kenji/Hit',
+              width: 600,
+              height: 200,
+              total: 3,
               i: 1,
             },
           }

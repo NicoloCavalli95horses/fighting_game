@@ -1,7 +1,7 @@
 <template>
   <nav>
-    <RouterLink to="/">Home | </RouterLink>
-    <RouterLink to="/game">Game</RouterLink>
+    <RouterLink to="/"><h3>Home | </h3></RouterLink>
+    <RouterLink to="/game"><h3>Game</h3></RouterLink>
   </nav>
   
   <RouterView />
@@ -14,5 +14,12 @@ import { RouterLink, RouterView } from "vue-router";
 <style scoped lang="scss">
   nav {
     position: absolute;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+
+    h3 {
+      display: inline;
+    }
   }
 </style>

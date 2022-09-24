@@ -13,6 +13,20 @@ const router = createRouter({
       path: "/game",
       name: "game",
       component: () => import('../views/Game.vue'),
+    },
+    {
+      path: "/online",
+      name: "online",
+      component: () => import('../views/Online.vue'),
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: () => import('../views/Settings.vue'),
+    },    {
+      path: "/credits",
+      name: "credits",
+      component: () => import('../views/Credits.vue'),
     }
   ],
 });

@@ -1,4 +1,5 @@
 <template>
+  <Winner />
   <HealthBar />
   <canvas :width="store.window.width" :height="store.window.height"></canvas>
 </template>
@@ -10,6 +11,7 @@
 import { onMounted, computed } from "@vue/runtime-core";
 import { Store } from "@/stores/store";
 import HealthBar from "../components/HealthBar.vue";
+import Winner from "../components/Winner.vue";
 import { 
   draw,
   detectCollision,
@@ -63,13 +65,21 @@ function updateCanvas(ctx) {
   if (detectCollision(store.game.players.player, store.game.players.enemy) && store.game.players.player.canAttack ) {
     store.game.players.player.canAttack = false;
     store.game.players.enemy.state = 'hit';
-    store.game.players.enemy.health -= store.game.players.player.strenght;
+    if ( store.game.players.enemy.health >= store.game.players.player.strenght ) {
+      store.game.players.enemy.health -= store.game.players.player.strenght;
+    } else {
+      store.game.players.enemy.health = 0;
+    }
   }
 
   if (detectCollision(store.game.players.enemy, store.game.players.player) && store.game.players.enemy.canAttack) {
     store.game.players.enemy.canAttack = false;
     store.game.players.player.state = 'hit';
-    store.game.players.player.health -= store.game.players.enemy.strenght;
+    if ( store.game.players.player.health >= store.game.players.enemy.strenght ) {
+      store.game.players.player.health -= store.game.players.enemy.strenght;
+    } else {
+      store.game.players.player.health = 0;
+    }
   }
 
   frame ++
