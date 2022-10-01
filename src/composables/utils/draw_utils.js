@@ -1,5 +1,4 @@
 export function draw(ctx, user, frame, window) {
-
   // Apply gravity
   user.position.y += user.velocity.y;
 
@@ -39,16 +38,19 @@ export function draw(ctx, user, frame, window) {
   // Switch between animations
   if (user.velocity.y < 0) {
     user.state = "jumping";
-  } else if (user.velocity.y > 0) {
+  } else if (user.velocity.y > 0 && user.position.y < 535 && user.state != "running") {
     user.state = "falling";
-  } else if (user.health <= 0) {
-    user.state = "dead";
   } else if (
     user.state != "running" &&
+    user.state != "jumping" &&
     user.state != "attacking" &&
     user.state != "hit"
   ) {
     user.state = "idle";
+  }
+
+  if (user.health <= 0) {
+    user.state = "dead";
   }
 
   // Do not go beyond the screen
@@ -64,8 +66,8 @@ export function draw(ctx, user, frame, window) {
 
 export function handleKeyboardEvents(user) {
   window.addEventListener("keydown", (e) => {
-    if (user.isDead){
-      return
+    if (user.isDead) {
+      return;
     }
     if (e.key !== user.lastKey) user.lastKey = e.key;
 
@@ -73,15 +75,15 @@ export function handleKeyboardEvents(user) {
       // Left
       case user.keys.left:
         if (user.state !== "attacking") {
-          user.velocity.x = -5;
           user.state = "running";
+          user.velocity.x = -5;
         }
         break;
       // Right
       case user.keys.right:
         if (user.state !== "attacking") {
-          user.velocity.x = 5;
           user.state = "running";
+          user.velocity.x = 5;
         }
         break;
       // Up
@@ -238,14 +240,7 @@ function drawAnimation(
   }
 }
 
-
-function drawOneTimeAnimation(
-  ctx,
-  user,
-  animation,
-  frame,
-  speed = 15,
-) {
+function drawOneTimeAnimation(ctx, user, animation, frame, speed = 15) {
   animation.image.src = animation.src + ".png";
 
   ctx.drawImage(

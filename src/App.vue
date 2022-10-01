@@ -1,14 +1,22 @@
 <template>
   <nav>
-    <RouterLink to="/"><h3>Home | </h3></RouterLink>
-    <RouterLink to="/game"><h3>Game</h3></RouterLink>
+    <RouterLink to="/"><h3>Menu</h3></RouterLink>
   </nav>
   
   <RouterView />
 </template>
 
 <script setup>
+// ==============================
+// Import
+// ==============================
 import { RouterLink, RouterView } from "vue-router";
+
+
+// ==============================
+// Variables
+// ==============================
+
 </script>
 
 <style scoped lang="scss">
@@ -17,9 +25,6 @@ import { RouterLink, RouterView } from "vue-router";
     width: 100%;
     text-align: center;
     z-index: 10;
-
-    h3 {
-      display: inline;
-    }
+    margin-top: 8px;
   }
 </style>

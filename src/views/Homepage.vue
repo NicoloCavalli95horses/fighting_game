@@ -1,10 +1,10 @@
 <template>
   <div class="background flex-column">
     <ul>
-      <RouterLink to="/online"><li>Online mode</li></RouterLink>
-      <RouterLink to="/settings"><li>Game settings</li></RouterLink>
-      <RouterLink to="/credits"><li>Credits</li></RouterLink>
-      <li>Credits</li>
+      <li><RouterLink to="/game">Play</RouterLink></li>
+      <li><RouterLink to="/online">Online mode</RouterLink></li>
+      <li><RouterLink to="/settings">Game settings</RouterLink></li>
+      <!-- <li><RouterLink to="/credits">Credits</RouterLink></li> -->
     </ul>
   </div>
 </template>
@@ -19,11 +19,10 @@ import { RouterLink, RouterView } from "vue-router";
   height: 100vh;
   background-color: #111;
   ul {
-    text-align: center; 
+    text-align: center;
   }
-}
 
-li {
+  li {
     font-size: 28px;
     padding: 20px;
     &:not(:last-child) {
@@ -33,8 +32,7 @@ li {
       cursor: pointer;
       transition-duration: 600ms;
       filter: brightness(120%);
-      transform: scale(1.1);
-      padding: 30px;
     }
   }
+}
 </style>

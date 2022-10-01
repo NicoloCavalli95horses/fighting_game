@@ -9,8 +9,9 @@ export const Store = defineStore({
     },
     game: {
       settings: {
-        fightTime: 60,
-        result: false,
+        fightTime: -1,
+        frameRate: 10,
+        pause: false,
       },
       players: {
         player: {
@@ -32,7 +33,7 @@ export const Store = defineStore({
           lastKey: null,
           width: 50,
           height: 150,
-          gravity: 0.4,
+          gravity: 0.6,
           state: 'idle',
           canAttack: true,
           isDead: false,
@@ -126,7 +127,7 @@ export const Store = defineStore({
           lastKey: null,
           width: 50,
           height: 150,
-          gravity: 0.5,
+          gravity: 0.4,
           state: 'idle',
           canAttack: true,
           isDead: false,
@@ -205,9 +206,4 @@ export const Store = defineStore({
     },
   }),
 
-  // getters: {
-  // },
-
-  // actions: {
-  // },
 });

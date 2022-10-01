@@ -50,6 +50,14 @@
   margin-bottom: 12px;
 }
 
+.r-12 {
+  margin-right: 12px;
+}
+
+.l-12 {
+  margin-left: 12px;
+}
+
 .bold {
   font-weight: bold;
 }

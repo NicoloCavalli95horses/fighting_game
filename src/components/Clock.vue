@@ -1,6 +1,6 @@
 <template>
-  <div v-if="timer !== 'timeout'" class="clock-box flex-center">
-    <h3 :class="{ 'infinite': infinite }">{{ timer }}</h3>
+  <div v-if="store.game.settings.fightTime !== 'timeout'" class="clock-box flex-center">
+    <h3 :class="{ 'infinite': infinite }">{{ store.game.settings.fightTime }}</h3>
   </div>
 </template>
 
@@ -13,34 +13,26 @@ import { onMounted } from "@vue/runtime-core";
 import { Store } from "@/stores/store";
 
 // ==============================
-// Props
-// ==============================
-const props = defineProps({
-  time: Number,
-});
-
-// ==============================
 // Variables
 // ==============================
 const store = Store();
-const timer = ref(store.game.settings.fightTime);
 const infinite = ref(false);
 
 // ==============================
 // Functions
 // ==============================
 onMounted(() => {
-  if (timer.value !== -1) {
+  if (store.game.settings.fightTime !== -1) {
     setInterval(() => {
-      if (timer.value > 0) {
-         timer.value--
+      if (store.game.settings.fightTime > 0 && !store.game.players.player.isDead && !store.game.players.enemy.isDead) {
+        store.game.settings.fightTime--
       } else { 
         store.game.settings.fightTime = 'timeout';
         return
      }
     }, 1000);
   } else {
-    timer.value =  '∞';
+    store.game.settings.fightTime =  '∞';
     infinite.value = true;
   }
 });
@@ -55,7 +47,6 @@ onMounted(() => {
   h3 {
     font-size: 38px;
   }
-
   .infinite {
     color: orange;
     font-size: 65px;
