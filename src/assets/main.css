@@ -73,3 +73,11 @@ h3 {
 .relative {
   position: relative;
 }
+
+.display-none {
+  display: none;
+}
+
+.unvisible {
+  visibility: hidden;
+}

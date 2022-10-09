@@ -29,6 +29,7 @@ import {
 // Variables
 // ==============================
 const store = Store();
+let interval = null;
 let frame = 0; // Track canvas frame iteration
 
 // ==============================
@@ -40,11 +41,12 @@ onMounted(() => {
   const ctx = canvas.getContext("2d");
   canvas.width = store.window.width;
   canvas.height = store.window.height;
-
-  setInterval(updateCanvas, store.game.settings.frameRate, ctx);
+  
+  interval = setInterval(updateCanvas, store.game.settings.frameRate, ctx);
 });
 
 onUnmounted(() => {
+  clearInterval(interval);
   store.$reset();
 });
 
@@ -53,6 +55,7 @@ onUnmounted(() => {
 // ==============================
 
 function updateCanvas(ctx) {
+
   // Set canvas background
   drawBackground(ctx, store.window);
   drawShop(ctx, frame);
