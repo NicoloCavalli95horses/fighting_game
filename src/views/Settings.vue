@@ -6,7 +6,7 @@
       <h3>General</h3>
       <div class="flex-column">
         <div class="row">
-          <h4>Fight time</h4>
+          <h4 class="l-24">Fight time</h4>
           <InputRange
             :start="store.game.settings.fightTime"
             :min="0"
@@ -16,7 +16,7 @@
         </div>
 
         <div class="row">
-          <h4>Game speed (fps)</h4>
+          <h4 class="l-24">Game speed (fps)</h4>
           <InputRange
             :start="store.game.settings.frameRate"
             :min="1"
@@ -94,12 +94,15 @@ const store = Store();
     display: inline-block;
   }
   .settings-container {
-
     max-height: 550px;
     max-width: 700px;
     margin: 50px auto;
     overflow: auto;
     padding: 20px;
+
+    &::-webkit-scrollbar {
+     display: none;
+    }
 
     h3 {
       margin-top: 20px;
@@ -112,7 +115,7 @@ const store = Store();
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      justify-content: space-between;
       background-color: #222;
       border-radius: 12px;
       margin: 10px;
