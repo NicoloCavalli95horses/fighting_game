@@ -6,11 +6,11 @@
       <h3>General</h3>
       <div class="flex-column">
         <div class="row">
-          <h4 class="l-24">Fight time</h4>
+          <h4 class="l-24">Fight time (sec)</h4>
           <InputRange
             :start="store.game.settings.fightTime"
             :min="0"
-            :max="300"
+            :max="360"
             @value="(val) => (store.game.settings.fightTime = val)"
           />
         </div>
@@ -29,46 +29,82 @@
       <h3>Player 1</h3>
       <div class="flex-column">
         <div class="row">
-          <h4>Name</h4>
-          <span>New name here...</span>
+          <h4 class="l-24">Name</h4>
+          <InputText
+            :placeholder="store.game.players.player.name"
+            @update="(val) => (store.game.players.player.name = val)"
+          />
         </div>
 
         <div class="row">
-          <h4>Strenght</h4>
-          <span>Strenght here...</span>
+          <h4 class="l-24">Strenght</h4>
+          <InputRange
+            :start="store.game.players.player.strenght"
+            :min="1"
+            :max="20"
+            @value="(val) => (store.game.players.player.strenght = val)"
+          />
         </div>
 
         <div class="row">
-          <h4>Health</h4>
-          <span>Health here...</span>
+          <h4 class="l-24">Health</h4>
+          <InputRange
+            :start="store.game.players.player.health"
+            :min="1"
+            :max="500"
+            @value="(val) => (store.game.players.player.health = val)"
+          />
         </div>
 
         <div class="row">
-          <h4>Gravity</h4>
-          <span>Gravity here...</span>
+          <h4 class="l-24">Gravity</h4>
+          <InputRange
+            :start="store.game.players.player.gravity * 10"
+            :min="1"
+            :max="10"
+            @value="(val) => (store.game.players.player.gravity = val / 10)"
+          />
         </div>
       </div>
 
       <h3>Player 2</h3>
       <div class="flex-column">
         <div class="row">
-          <h4>Name</h4>
-          <span>New name here...</span>
+          <h4 class="l-24">Name</h4>
+          <InputText
+            :placeholder="store.game.players.enemy.name"
+            @update="(val) => (store.game.players.enemy.name = val)"
+          />
         </div>
 
         <div class="row">
-          <h4>Strenght</h4>
-          <span>Strenght here...</span>
+          <h4 class="l-24">Strenght</h4>
+          <InputRange
+            :start="store.game.players.enemy.strenght"
+            :min="1"
+            :max="20"
+            @value="(val) => (store.game.players.enemy.strenght = val)"
+          />
         </div>
 
         <div class="row">
-          <h4>Health</h4>
-          <span>Health here...</span>
+          <h4 class="l-24">Health</h4>
+          <InputRange
+            :start="store.game.players.enemy.health"
+            :min="1"
+            :max="500"
+            @value="(val) => (store.game.players.enemy.health = val)"
+          />
         </div>
 
         <div class="row">
-          <h4>Gravity</h4>
-          <span>Gravity here...</span>
+          <h4 class="l-24">Gravity</h4>
+          <InputRange
+            :start="store.game.players.enemy.gravity * 10"
+            :min="1"
+            :max="10"
+            @value="(val) => (store.game.players.enemy.gravity = val / 10)"
+          />
         </div>
       </div>
     </div>
@@ -76,9 +112,14 @@
 </template>
 
 <script setup>
+// ==============================
+// Import
+// ==============================
 import { Store } from "@/stores/store";
 import InputRange from "../components/InputRange.vue";
+import InputText from "../components/InputText.vue";
 const store = Store();
+
 </script>
 
 <style lang="scss" scoped>
@@ -101,7 +142,7 @@ const store = Store();
     padding: 20px;
 
     &::-webkit-scrollbar {
-     display: none;
+      display: none;
     }
 
     h3 {
@@ -113,6 +154,7 @@ const store = Store();
 
     .row {
       width: 100%;
+      min-height: 120px;
       display: flex;
       align-items: center;
       justify-content: space-between;

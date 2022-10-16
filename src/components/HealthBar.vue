@@ -54,6 +54,7 @@ watch(
   () => {
     if (store.game.players.player.health <= 0) {
       store.game.players.player.isDead = true;
+      store.game.settings.winner = store.game.players.enemy.name;
     }
   }
 );
@@ -63,6 +64,7 @@ watch(
   () => {
     if (store.game.players.enemy.health <= 0) {
       store.game.players.enemy.isDead = true;
+      store.game.settings.winner = store.game.players.player.name;
     }
   }
 );

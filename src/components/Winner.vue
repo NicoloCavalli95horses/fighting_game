@@ -1,9 +1,10 @@
 <template>
-  <div v-if="winner" class="absolute">
+  <div v-if="winner || timeout" class="absolute">
     <div class="flex-column">
-      <h1>{{ winner }}</h1>
+      <h1 v-if="winner">{{ winner }} win!</h1>
+      <h1 v-else-if="timeout || !winner ">Tie</h1> 
       <div class="top-12 flex-center">
-        <Btn text="Restart" class="r-12" @click="store.$reset()" />
+        <Btn text="Play again" class="r-12" @click="playAgain()" />
         <RouterLink to="/">
           <Btn text="Menu" />
         </RouterLink>
@@ -15,37 +16,45 @@
 <script setup>
 import Btn from "../components/Btn.vue";
 import { Store } from "@/stores/store";
-import { computed } from "@vue/runtime-core";
+import { computed, ref, watch } from "@vue/runtime-core";
 import { RouterLink, RouterView } from "vue-router";
 
 // ==============================
 // Variables
 // ==============================
 const store = Store();
-const winner = computed(() => {
-  if (
-    store.game.players.player.isDead ||
-    (store.game.players.player.health < store.game.players.enemy.health &&
-      store.game.settings.fightTime === "timeout")
-  ) {
-    return store.game.players.enemy.name + " win!";
-  } else if (
-    store.game.players.enemy.isDead ||
-    (store.game.players.enemy.health < store.game.players.player.health &&
-      store.game.settings.fightTime === "timeout")
-  ) {
-    return store.game.players.player.name + " win!";
-  } else if (
-    !store.game.players.enemy.isDead &&
-    !store.game.players.player.isDead &&
-    store.game.players.enemy.health == store.game.players.player.health &&
-    store.game.settings.fightTime === "timeout"
-  ) {
-    return "tie";
-  } else {
-    return false;
+const winner = ref( false );
+const timeout = ref( false );
+
+
+// ==============================
+// Functions
+// ==============================
+function playAgain(){
+  store.$reset()
+  winner.value = false;
+  timeout.value = false;
+}
+// ==============================
+// Watcher
+// ==============================
+watch(
+  () => store.game.settings.winner,
+  () => {
+    if ( store.game.settings.winner ) {
+      winner.value = store.game.settings.winner
+    }
   }
-});
+);
+
+watch(
+  () => store.game.settings.pause,
+  () => {
+    if ( store.game.settings.pause ) {
+      timeout.value = store.game.settings.pause
+    }
+  }
+);
 </script>
 
 <style lang="scss">

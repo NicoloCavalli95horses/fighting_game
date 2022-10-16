@@ -12,7 +12,7 @@
 // ==============================
 // Imports
 // ==============================
-import { onMounted, computed, onUnmounted } from "@vue/runtime-core";
+import { onMounted, computed, onUnmounted, watch } from "@vue/runtime-core";
 import { Store } from "@/stores/store";
 import HealthBar from "../components/HealthBar.vue";
 import Winner from "../components/Winner.vue";
@@ -57,6 +57,8 @@ onUnmounted(() => {
 
 function updateCanvas(ctx) {
 
+  console.log('looping');
+
   // Set canvas background
   drawBackground(ctx, store.window);
   drawShop(ctx, frame);
@@ -90,6 +92,19 @@ function reactToCollision(player, enemy) {
     }
   }
 }
+
+// ==============================
+// Watcher
+// ==============================
+watch(
+  () => store.game.settings.pause,
+  () => {
+    if ( store.game.settings.pause ) {
+      clearInterval(interval);
+    }
+  }
+);
+
 </script>
 
 <style lang="scss" scoped>

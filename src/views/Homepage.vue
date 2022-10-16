@@ -2,7 +2,7 @@
   <div class="background flex-column">
     <ul>
       <li><RouterLink to="/game">Play</RouterLink></li>
-      <li><RouterLink to="/online">Online mode</RouterLink></li>
+      <!-- <li><RouterLink to="/online">Online mode</RouterLink></li> -->
       <li><RouterLink to="/settings">Game settings</RouterLink></li>
       <!-- <li><RouterLink to="/credits">Credits</RouterLink></li> -->
     </ul>

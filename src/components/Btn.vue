@@ -6,13 +6,6 @@
 
 <script setup>
 // ==============================
-// Import
-// ==============================
-// import { ref } from "@vue/reactivity";
-// import { onMounted } from "@vue/runtime-core";
-// import { Store } from "@/stores/store";
-
-// ==============================
 // Props
 // ==============================
 const props = defineProps({
