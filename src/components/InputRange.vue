@@ -1,59 +1,67 @@
 <template>
-  <div class="flex-column">
-    <div class="tip"><p :style="{ 'transform' : ` translateX( ${ offset }px )`}">{{ current }}</p></div>
-    <input 
+  <div class="input-wrapper">
+    <span :style="{ 'left': offset }">{{ current }}</span>
+    <input
       type="range"
       :min="min"
       :max="max"
       v-model="current"
-      @mousedown="isClicked = true"
-      @mouseup="isClicked = false; emit('value', current)"
-      @mousemove="e => handleMouseMove(e)"/>
+      @mouseup="emit('value', current)"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 const props = defineProps({
   min: Number,
   max: Number,
-  current: Number,
+  start: Number,
 });
 
-const emit = defineEmits([
-  'value'
-])
-
-const offset = ref( null );
+const emit = defineEmits(["value"]);
+const current = ref(props.start);
 const isClicked = ref(false);
 
-function handleMouseMove(e){
-  if ( isClicked.value && e.offsetX > 0 && e.offsetX < 100 ) {
-    offset.value = e.offsetX;
-  }
-}
+/**
+ *  Normalize <input type="range">
+ *  val = (( x - min ) / ( max - min ))  // range from 0 to 1
+ */
+const offset = computed(() => {
+  return  Math.round(((current.value - props.min) / (props.max - props.min)) * 100) + "%"
+});
 </script>
 
 <style lang="scss" scoped>
+$size: 50px;
 
-  .tip {
-    width: 100%;
-
-    div {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50px;
-      padding: 8px;
-      text-align: center;
-    }
+.input-wrapper {
+  position: relative;
+  overflow: visible;
+  margin: 30px;
+  span {
+    position: absolute;
+    box-sizing: border-box;
+    top: 0;
+    width: $size;
+    padding: 8px;
+    text-align: center;
+    display: block;
+    transform: translateX(-$size/2) translateY(-16px);
+    border: 2px solid #0075ff;
+    border-radius: 6px;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
+
   input[type="range"] {
-    margin: 10px 0;
+    width: 350px;
+    height: 10px;
+    margin-top: 30px;
     cursor: pointer;
   }
   input[type="range"]::-webkit-slider-runnable-track {
     background: #344553;
   }
-
+}
 </style>

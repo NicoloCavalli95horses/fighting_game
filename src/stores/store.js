@@ -9,7 +9,7 @@ export const Store = defineStore({
     },
     game: {
       settings: {
-        fightTime: -1,
+        fightTime: 60,
         frameRate: 10,
         pause: false,
       },

@@ -48,6 +48,7 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(interval);
   store.$reset();
+  store.game.settings.pause = true;
 });
 
 // ==============================

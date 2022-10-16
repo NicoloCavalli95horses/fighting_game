@@ -1,30 +1,122 @@
 <template>
-  <div class="settings-background">
-    <h2>Settings</h2>
-    <span class="r-12">Fight Time</span>
-    <InputRange
-      :current="store.game.settings.fightTime"
-      :min="0"
-      :max="300"
-      @value="(val) => handleRangeValue(val)"
-    />
+  <div class="settings">
+    <h1>Game settings</h1>
+
+    <div class="settings-container">
+      <h3>General</h3>
+      <div class="flex-column">
+        <div class="row">
+          <h4>Fight time</h4>
+          <InputRange
+            :start="store.game.settings.fightTime"
+            :min="0"
+            :max="300"
+            @value="(val) => (store.game.settings.fightTime = val)"
+          />
+        </div>
+
+        <div class="row">
+          <h4>Game speed (fps)</h4>
+          <InputRange
+            :start="store.game.settings.frameRate"
+            :min="1"
+            :max="15"
+            @value="(val) => (store.game.settings.frameRate = val)"
+          />
+        </div>
+      </div>
+
+      <h3>Player 1</h3>
+      <div class="flex-column">
+        <div class="row">
+          <h4>Name</h4>
+          <span>New name here...</span>
+        </div>
+
+        <div class="row">
+          <h4>Strenght</h4>
+          <span>Strenght here...</span>
+        </div>
+
+        <div class="row">
+          <h4>Health</h4>
+          <span>Health here...</span>
+        </div>
+
+        <div class="row">
+          <h4>Gravity</h4>
+          <span>Gravity here...</span>
+        </div>
+      </div>
+
+      <h3>Player 2</h3>
+      <div class="flex-column">
+        <div class="row">
+          <h4>Name</h4>
+          <span>New name here...</span>
+        </div>
+
+        <div class="row">
+          <h4>Strenght</h4>
+          <span>Strenght here...</span>
+        </div>
+
+        <div class="row">
+          <h4>Health</h4>
+          <span>Health here...</span>
+        </div>
+
+        <div class="row">
+          <h4>Gravity</h4>
+          <span>Gravity here...</span>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { Store } from "@/stores/store";
 import InputRange from "../components/InputRange.vue";
 const store = Store();
-
-function handleRangeValue(val) {
-  store.game.settings.fightTime = val;
-}
 </script>
 
 <style lang="scss" scoped>
-.settings-background {
+.settings {
   width: 100%;
   height: 100vh;
   background-color: #111;
+
+  h1 {
+    margin-top: 80px;
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+  }
+  .settings-container {
+
+    max-height: 550px;
+    max-width: 700px;
+    margin: 50px auto;
+    overflow: auto;
+    padding: 20px;
+
+    h3 {
+      margin-top: 20px;
+      text-align: center;
+      width: 100%;
+      display: inline-block;
+    }
+
+    .row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background-color: #222;
+      border-radius: 12px;
+      margin: 10px;
+    }
+  }
 }
 </style>
