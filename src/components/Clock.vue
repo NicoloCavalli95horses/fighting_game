@@ -1,10 +1,10 @@
 <template>
   <div class="clock-box">
-    <template v-if="time >= 1">
-      <h3>{{ time }}</h3>
+    <template v-if="store.game.settings.fightTime !== 'timeout'">
+      <h3>{{ store.game.settings.fightTime }}</h3>
     </template>
     <template v-else>
-      <p>{{ time }}</p>
+      <p>{{ store.game.settings.fightTime }}</p>
     </template>
   </div>
 </template>
@@ -13,48 +13,33 @@
 // ==============================
 // Import
 // ==============================
-import { ref } from "@vue/reactivity";
-import { onMounted, onUnmounted, watch } from "@vue/runtime-core";
+import { onMounted, onUnmounted } from "@vue/runtime-core";
 import { Store } from "@/stores/store";
 
 // ==============================
 // Variables
 // ==============================
 const store = Store();
-const time = ref( store.game.settings.fightTime );
 let interval = null;
-
-// ==============================
-// Watcher
-// ==============================
-watch(
-  () => store.game.settings.pause,
-  () => {
-    if ( store.game.settings.pause ) {
-      clearInterval(interval);
-    }
-  }
-);
-
-
 
 // ==============================
 // Life cycle
 // ==============================
 onMounted(() => {
   interval = setInterval(() => {
-    if ( time.value > 1 ){
-      time.value--;
-    } else {
-      time.value = 'timeout';
-      store.game.settings.pause = true;
+    if (!store.game.settings.pause && !store.game.settings.winner) {
+      if (store.game.settings.fightTime > 1) {
+        store.game.settings.fightTime--;
+      } else {
+        store.game.settings.fightTime = "timeout";
+      }
     }
-  }, 1000)
+  }, 1000);
 });
 
 onUnmounted(() => {
-  time.value = store.game.settings.fightTime;
-})
+  clearInterval(interval);
+});
 </script>
 
 <style lang="scss" scoped>

@@ -5,8 +5,10 @@
   margin: 0;
   padding: 0;
   box-sizing: content-box;
-  overflow: hidden;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  list-style: none;
+  touch-action: none !important;
+  overflow: hidden;
 }
 
 .full-flex {

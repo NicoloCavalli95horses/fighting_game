@@ -12,7 +12,13 @@
 // ==============================
 // Imports
 // ==============================
-import { onMounted, computed, onUnmounted, watch } from "@vue/runtime-core";
+import {
+  onMounted,
+  onUpdated,
+  onUnmounted,
+  watch,
+  ref,
+} from "@vue/runtime-core";
 import { Store } from "@/stores/store";
 import HealthBar from "../components/HealthBar.vue";
 import Winner from "../components/Winner.vue";
@@ -31,58 +37,64 @@ import {
 const store = Store();
 let interval = null;
 let frame = 0; // Track canvas frame iteration
+const pause_loop = ref();
 
 // ==============================
 // Life cycle
 // ==============================
-
 onMounted(() => {
   const canvas = document.querySelector("canvas");
   const ctx = canvas.getContext("2d");
   canvas.width = store.window.width;
   canvas.height = store.window.height;
-  
+
+  // Listen to keyboard event (keys are defined in the store)
+  handleKeyboardEvents(store.game.players.enemy);
+  handleKeyboardEvents(store.game.players.player);
+
   interval = setInterval(updateCanvas, store.game.settings.frameRate, ctx);
 });
 
 onUnmounted(() => {
   clearInterval(interval);
   store.$reset();
-  store.game.settings.pause = true;
 });
 
 // ==============================
 // Functions
 // ==============================
-
 function updateCanvas(ctx) {
+  if (!pause_loop.value) {
 
-  console.log('looping');
+    // Set canvas background
+    drawBackground(ctx, store.window);
+    drawShop(ctx, frame);
 
-  // Set canvas background
-  drawBackground(ctx, store.window);
-  drawShop(ctx, frame);
+    // Draw the players (handle: gravity, attackBox, jumping, left/right, screen borders,)
+    draw(ctx, store.game.players.player, frame, store.window);
+    draw(ctx, store.game.players.enemy, frame, store.window);
 
-  // Draw the players (handle: gravity, attackBox, jumping, left/right, screen borders,)
-  draw(ctx, store.game.players.player, frame, store.window);
-  draw(ctx, store.game.players.enemy, frame, store.window);
+    // Move the attackBox in order to make the players always face each other
+    setDirection(store.game.players.player, store.game.players.enemy);
 
-  // Move the attackBox in order to make the players always face each other
-  setDirection(store.game.players.player, store.game.players.enemy);
+    // Handle collisions and subtract health
+    reactToCollision(
+      store.game.players.player,
+      store.game.players.enemy,
+      store.game.settings.fightTime
+    );
+    reactToCollision(
+      store.game.players.enemy,
+      store.game.players.player,
+      store.game.settings.fightTime
+    );
 
-  // Handle collisions and subtract health
-  reactToCollision(store.game.players.player, store.game.players.enemy);
-  reactToCollision(store.game.players.enemy, store.game.players.player);
-
-  frame++;
+    frame++;
+  }
 }
 
-// Listen to keyboard event (keys are defined in the store)
-handleKeyboardEvents(store.game.players.enemy);
-handleKeyboardEvents(store.game.players.player);
-
-function reactToCollision(player, enemy) {
-  if (detectCollision(player, enemy) && player.canAttack) {
+function reactToCollision(player, enemy, time) {
+  if (detectCollision(player, enemy) && player.canAttack && time != "timeout") {
     player.canAttack = false;
     enemy.state = "hit";
     if (enemy.health >= player.strenght) {
@@ -99,12 +111,9 @@ function reactToCollision(player, enemy) {
 watch(
   () => store.game.settings.pause,
   () => {
-    if ( store.game.settings.pause ) {
-      clearInterval(interval);
-    }
+    pause_loop.value = store.game.settings.pause ? true : false;
   }
 );
-
 </script>
 
 <style lang="scss" scoped>

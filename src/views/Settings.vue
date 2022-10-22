@@ -126,6 +126,7 @@ const store = Store();
 .settings {
   width: 100%;
   height: 100vh;
+  overflow: auto;
   background-color: #111;
 
   h1 {
@@ -135,15 +136,9 @@ const store = Store();
     display: inline-block;
   }
   .settings-container {
-    max-height: 550px;
     max-width: 700px;
-    margin: 50px auto;
-    overflow: auto;
-    padding: 20px;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    margin: 0 auto;
+    padding: 40px;
 
     h3 {
       margin-top: 20px;

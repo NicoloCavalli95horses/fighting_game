@@ -38,7 +38,11 @@ export function draw(ctx, user, frame, window) {
   // Switch between animations
   if (user.velocity.y < 0) {
     user.state = "jumping";
-  } else if (user.velocity.y > 0 && user.position.y < 535 && user.state != "running") {
+  } else if (
+    user.velocity.y > 0 &&
+    user.position.y < 535 &&
+    user.state != "running"
+  ) {
     user.state = "falling";
   } else if (
     user.state != "running" &&
@@ -68,53 +72,55 @@ export function handleKeyboardEvents(user) {
   window.addEventListener("keydown", (e) => {
     if (user.isDead) {
       return;
-    }
-    if (e.key !== user.lastKey) user.lastKey = e.key;
+    } else {
+      if (e.key !== user.lastKey) user.lastKey = e.key;
 
-    switch (user.lastKey) {
-      // Left
-      case user.keys.left:
-        if (user.state !== "attacking") {
-          user.state = "running";
-          user.velocity.x = -5;
-        }
-        break;
-      // Right
-      case user.keys.right:
-        if (user.state !== "attacking") {
-          user.state = "running";
-          user.velocity.x = 5;
-        }
-        break;
-      // Up
-      case user.keys.up:
-        if (user.position.y > window.innerHeight / 2) user.velocity.y = -20;
-        break;
-      // Attack
-      case user.keys.attack:
-        if (user.state !== "running") {
-          user.state = "attacking";
-        }
-        break;
+      switch (user.lastKey) {
+        // Left
+        case user.keys.left:
+          if (user.state !== "attacking") {
+            user.state = "running";
+            user.velocity.x = -5;
+          }
+          break;
+        // Right
+        case user.keys.right:
+          if (user.state !== "attacking") {
+            user.state = "running";
+            user.velocity.x = 5;
+          }
+          break;
+        // Up
+        case user.keys.up:
+          if (user.position.y > window.innerHeight / 2) user.velocity.y = -20;
+          break;
+        // Attack
+        case user.keys.attack:
+          if (user.state !== "running") {
+            user.state = "attacking";
+          }
+          break;
+      }
     }
   });
 
   window.addEventListener("keyup", (e) => {
     if (user.isDead) {
       return;
-    }
-    if (e.key !== user.lastKey) user.lastKey = e.key;
-    switch (user.lastKey) {
-      // Left
-      case user.keys.left:
-        user.state = "idle";
-        user.velocity.x = 0;
-        break;
-      // Right
-      case user.keys.right:
-        user.state = "idle";
-        user.velocity.x = 0;
-        break;
+    } else {
+      if (e.key !== user.lastKey) user.lastKey = e.key;
+      switch (user.lastKey) {
+        // Left
+        case user.keys.left:
+          user.state = "idle";
+          user.velocity.x = 0;
+          break;
+        // Right
+        case user.keys.right:
+          user.state = "idle";
+          user.velocity.x = 0;
+          break;
+      }
     }
   });
 }
@@ -173,10 +179,10 @@ export function drawShop(ctx, frame) {
     0, // Cropping Y (remain the same)
     SHOP_WIDTH / TOTAL_SHOP_FRAME,
     SHOP_HEIGHT,
-    1100, // X position on the canvas of the whole image
-    235, // Y position on the canvas of the whole image
-    (SHOP_WIDTH / TOTAL_SHOP_FRAME) * 3.6, // WIDTH of the whole image
-    SHOP_HEIGHT * 3.6 // HEIGHT of the whole image
+    1000, // X position on the canvas of the whole image
+    250, // Y position on the canvas of the whole image
+    (SHOP_WIDTH / TOTAL_SHOP_FRAME) * 3, // WIDTH of the whole image
+    SHOP_HEIGHT * 3 // HEIGHT of the whole image
   );
 
   if (frame % 15 === 0) {
@@ -217,10 +223,10 @@ function drawAnimation(
     0,
     animation.width / animation.total,
     animation.height,
-    user.position.x - 330,
-    user.position.y - 255,
-    (animation.width / animation.total) * 3.5,
-    animation.height * 3.5
+    user.position.x - 280,
+    user.position.y - 280,
+    (animation.width / animation.total) * 3,
+    animation.height * 3
   );
 
   if (frame % speed === 0) {

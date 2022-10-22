@@ -1,7 +1,7 @@
 <template>
   <div class="background flex-column">
     <ul>
-      <li><RouterLink to="/game">Play</RouterLink></li>
+      <li @click="playGame"><RouterLink to="/game">Play</RouterLink></li>
       <!-- <li><RouterLink to="/online">Online mode</RouterLink></li> -->
       <li><RouterLink to="/settings">Game settings</RouterLink></li>
       <!-- <li><RouterLink to="/credits">Credits</RouterLink></li> -->
@@ -10,7 +10,23 @@
 </template>
 
 <script setup>
+// ==============================
+// Import
+// ==============================
 import { RouterLink, RouterView } from "vue-router";
+import { Store } from "@/stores/store";
+
+// ==============================
+// Consts
+// ==============================
+const store = Store();
+
+// ==============================
+// Function
+// ==============================
+function playGame(){
+  store.game.settings.pause = false;
+}
 </script>
 
 <style lang="scss" scoped>

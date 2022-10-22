@@ -1,8 +1,7 @@
 <template>
   <nav>
-    <RouterLink to="/"><h3>Menu</h3></RouterLink>
+    <RouterLink to="/"><h3 @click="pauseGame">Menu</h3></RouterLink>
   </nav>
-  
   <RouterView />
 </template>
 
@@ -10,12 +9,20 @@
 // ==============================
 // Import
 // ==============================
+import { Store } from "@/stores/store";
 import { RouterLink, RouterView } from "vue-router";
 
+// ==============================
+// Consts
+// ==============================
+const store = Store();
 
 // ==============================
-// Variables
+// Function
 // ==============================
+function pauseGame(){
+  store.game.settings.pause = true;
+}
 
 </script>
 
