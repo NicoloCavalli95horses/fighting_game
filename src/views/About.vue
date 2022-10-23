@@ -1,0 +1,35 @@
+<template>
+  <div class="back"><RouterLink to="/">Back</RouterLink></div>
+  <div class="page-bg">
+    <div class="page-container">
+      <h3>About</h3>
+
+      <p>"The Last Warrior" is a simple fighting game where two players have to battle each other to death. The game mechanics are very simple: move and attack! You can customize several different aspects of your characther such as name, health, strenght, gravity and so on.<br><br>
+      This game is developed in the Vue.js ecosystem and makes use of Vue Routing and Pinia state management.</p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { RouterLink, RouterView } from "vue-router";
+</script>
+
+<style lang="scss" scoped>
+.page-bg {
+  .page-container {
+    h3 {
+      margin-top: 20px;
+      text-align: center;
+      width: 100%;
+      display: inline-block;
+    }
+
+    p {
+      margin: 25px;
+      line-height: 2.5;
+      font-size: 20px;
+      letter-spacing: 3px;
+    }
+  }
+}
+</style>

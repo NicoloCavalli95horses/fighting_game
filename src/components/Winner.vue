@@ -111,7 +111,7 @@ watch(
 );
 
 function handleKeyDown(event) {
-  if (event.key === "p") {
+  if (event.key === store.game.settings.keys.pause ) {
     store.game.settings.pause = !store.game.settings.pause;
   }
 }

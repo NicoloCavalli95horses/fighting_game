@@ -13,6 +13,9 @@ export const Store = defineStore({
         frameRate: 10,
         pause: false,
         winner: false,
+        keys: {
+          pause: 'p'
+        }
       },
       players: {
         player: {

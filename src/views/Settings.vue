@@ -1,8 +1,9 @@
 <template>
-  <div class="settings">
+  <div class="page-bg">
+    <div class="back"><RouterLink to="/">Back</RouterLink></div>
     <h1>Game settings</h1>
 
-    <div class="settings-container">
+    <div class="page-container">
       <h3>General</h3>
       <div class="flex-column">
         <div class="row">
@@ -22,6 +23,14 @@
             :min="1"
             :max="15"
             @value="(val) => (store.game.settings.frameRate = val)"
+          />
+        </div>
+
+        <div class="row">
+          <h4 class="l-24">Pause mode</h4>
+          <KeySelector
+            :placeholder="store.game.settings.keys.pause"
+            @update="(val) => (store.game.settings.keys.pause = val)"
           />
         </div>
       </div>
@@ -116,18 +125,17 @@
 // Import
 // ==============================
 import { Store } from "@/stores/store";
+import { RouterLink, RouterView } from "vue-router";
 import InputRange from "../components/InputRange.vue";
 import InputText from "../components/InputText.vue";
+import Btn from "../components/Btn.vue";
+import KeySelector from "../components/KeySelector.vue";
 const store = Store();
 
 </script>
 
 <style lang="scss" scoped>
-.settings {
-  width: 100%;
-  height: 100vh;
-  overflow: auto;
-  background-color: #111;
+.page-bg {
 
   h1 {
     margin-top: 80px;
@@ -135,11 +143,7 @@ const store = Store();
     width: 100%;
     display: inline-block;
   }
-  .settings-container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 40px;
-
+  .page-container {
     h3 {
       margin-top: 20px;
       text-align: center;

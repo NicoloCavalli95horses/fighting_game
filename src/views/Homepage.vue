@@ -4,7 +4,7 @@
       <li @click="playGame"><RouterLink to="/game">Play</RouterLink></li>
       <!-- <li><RouterLink to="/online">Online mode</RouterLink></li> -->
       <li><RouterLink to="/settings">Game settings</RouterLink></li>
-      <!-- <li><RouterLink to="/credits">Credits</RouterLink></li> -->
+      <li><RouterLink to="/about">About</RouterLink></li>
     </ul>
   </div>
 </template>

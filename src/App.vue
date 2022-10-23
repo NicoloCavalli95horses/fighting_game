@@ -1,7 +1,4 @@
 <template>
-  <nav>
-    <RouterLink to="/"><h3 @click="pauseGame">Menu</h3></RouterLink>
-  </nav>
   <RouterView />
 </template>
 
