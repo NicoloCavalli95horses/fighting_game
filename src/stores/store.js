@@ -3,19 +3,15 @@ import { defineStore } from "pinia";
 export const Store = defineStore({
   id: "gameSettings",
   state: () => ({
-    window: {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    },
     game: {
       settings: {
         fightTime: 60,
         frameRate: 10,
         pause: false,
-        winner: false,
+        winner: "",
         keys: {
-          pause: 'p'
-        }
+          pause: "p",
+        },
       },
       players: {
         player: {
@@ -38,7 +34,7 @@ export const Store = defineStore({
           width: 50,
           height: 150,
           gravity: 0.6,
-          state: 'idle',
+          state: "idle",
           canAttack: true,
           isDead: false,
           mirror: false,
@@ -56,7 +52,7 @@ export const Store = defineStore({
           animation: {
             idle: {
               image: new Image(),
-              src : 'src/assets/img/characters/samuraiMack/Idle',
+              src: "src/assets/img/characters/samuraiMack/Idle",
               width: 1600,
               height: 200,
               total: 8,
@@ -64,7 +60,7 @@ export const Store = defineStore({
             },
             jump: {
               image: new Image(),
-              src : 'src/assets/img/characters/samuraiMack/Jump',
+              src: "src/assets/img/characters/samuraiMack/Jump",
               width: 400,
               height: 200,
               total: 2,
@@ -72,7 +68,7 @@ export const Store = defineStore({
             },
             fall: {
               image: new Image(),
-              src : 'src/assets/img/characters/samuraiMack/Fall',
+              src: "src/assets/img/characters/samuraiMack/Fall",
               width: 400,
               height: 200,
               total: 2,
@@ -80,7 +76,7 @@ export const Store = defineStore({
             },
             attack: {
               image: new Image(),
-              src : 'src/assets/img/characters/samuraiMack/Attack1',
+              src: "src/assets/img/characters/samuraiMack/Attack1",
               width: 1200,
               height: 200,
               total: 6,
@@ -88,7 +84,7 @@ export const Store = defineStore({
             },
             run: {
               image: new Image(),
-              src : 'src/assets/img/characters/samuraiMack/Run',
+              src: "src/assets/img/characters/samuraiMack/Run",
               width: 1600,
               height: 200,
               total: 8,
@@ -96,7 +92,7 @@ export const Store = defineStore({
             },
             death: {
               image: new Image(),
-              src : 'src/assets/img/characters/samuraiMack/Death',
+              src: "src/assets/img/characters/samuraiMack/Death",
               width: 1200,
               height: 200,
               total: 6,
@@ -104,18 +100,18 @@ export const Store = defineStore({
             },
             hit: {
               image: new Image(),
-              src : 'src/assets/img/characters/samuraiMack/Hit',
+              src: "src/assets/img/characters/samuraiMack/Hit",
               width: 800,
               height: 200,
               total: 4,
               i: 1,
             },
-          }
+          },
         },
         enemy: {
           name: "Kenji",
           position: {
-            x: (window.innerWidth - 100),
+            x: window.innerWidth - 100,
             y: 0,
           },
           velocity: {
@@ -132,7 +128,7 @@ export const Store = defineStore({
           width: 50,
           height: 150,
           gravity: 0.4,
-          state: 'idle',
+          state: "idle",
           canAttack: true,
           isDead: false,
           mirror: false,
@@ -150,7 +146,7 @@ export const Store = defineStore({
           animation: {
             idle: {
               image: new Image(),
-              src : 'src/assets/img/characters/kenji/Idle',
+              src: "src/assets/img/characters/kenji/Idle",
               width: 800,
               height: 200,
               total: 4,
@@ -158,7 +154,7 @@ export const Store = defineStore({
             },
             jump: {
               image: new Image(),
-              src : 'src/assets/img/characters/kenji/Jump',
+              src: "src/assets/img/characters/kenji/Jump",
               width: 400,
               height: 200,
               total: 2,
@@ -166,7 +162,7 @@ export const Store = defineStore({
             },
             attack: {
               image: new Image(),
-              src : 'src/assets/img/characters/kenji/Attack1',
+              src: "src/assets/img/characters/kenji/Attack1",
               width: 800,
               height: 200,
               total: 4,
@@ -174,7 +170,7 @@ export const Store = defineStore({
             },
             fall: {
               image: new Image(),
-              src : 'src/assets/img/characters/kenji/Fall',
+              src: "src/assets/img/characters/kenji/Fall",
               width: 400,
               height: 200,
               total: 2,
@@ -182,7 +178,7 @@ export const Store = defineStore({
             },
             run: {
               image: new Image(),
-              src : 'src/assets/img/characters/kenji/Run',
+              src: "src/assets/img/characters/kenji/Run",
               width: 1600,
               height: 200,
               total: 8,
@@ -190,7 +186,7 @@ export const Store = defineStore({
             },
             death: {
               image: new Image(),
-              src : 'src/assets/img/characters/kenji/Death',
+              src: "src/assets/img/characters/kenji/Death",
               width: 1400,
               height: 200,
               total: 7,
@@ -198,16 +194,124 @@ export const Store = defineStore({
             },
             hit: {
               image: new Image(),
-              src : 'src/assets/img/characters/kenji/Hit',
+              src: "src/assets/img/characters/kenji/Hit",
               width: 600,
               height: 200,
               total: 3,
               i: 1,
             },
-          }
+          },
         },
       },
     },
   }),
+  getters: {
+    getPlayerName() {
+      return (name) => {
+        if (name === "player") {
+          return this.game.players.player.name;
+        } else if (name === "enemy") {
+          return this.game.players.enemy.name;
+        }
+      };
+    },
+    getPlayerHealth() {
+      return (name) => {
+        if (name === "player") {
+          return this.game.players.player.health;
+        } else if (name === "enemy") {
+          return this.game.players.enemy.health;
+        }
+      };
+    },
+    getPlayerStrenght() {
+      return (player) => {
+        if (player === "player") {
+          return this.game.players.player.strenght;
+        } else if (player === "enemy") {
+          return this.game.players.enemy.strenght;
+        }
+      };
+    },
+    getPlayerGravity() {
+      return (player) => {
+        if (player === "player") {
+          return this.game.players.player.gravity;
+        } else if (player === "enemy") {
+          return this.game.players.enemy.gravity;
+        }
+      };
+    },
+    getFightTime() {
+      return this.game.settings.fightTime;
+    },
+    getWinner() {
+      return this.game.settings.winner;
+    },
+    getPauseMode() {
+      return this.game.settings.pause;
+    },
+    getPauseKey() {
+      return this.game.settings.keys.pause;
+    },
+    getFramerate() {
+      return this.game.settings.frameRate;
+    },
+  },
 
+  actions: {
+    setPlayerName(player, name) {
+      if (player === "player") {
+        this.game.players.player.name = name;
+      } else if (player === "enemy") {
+        this.game.players.enemy.name = name;
+      }
+    },
+    setPlayerStrenght(player, strenght) {
+      if (player === "player") {
+        this.game.players.player.strenght = strenght;
+      } else if (player === "enemy") {
+        this.game.players.enemy.strenght = strenght;
+      }
+    },
+    setPlayerHealth(player, health) {
+      if (player === "player") {
+        this.game.players.player.health = health;
+      } else if (player === "enemy") {
+        this.game.players.enemy.health = health;
+      }
+    },
+    setPlayerGravity(player, gravity) {
+      if (player === "player") {
+        this.game.players.player.gravity = gravity;
+      } else if (player === "enemy") {
+        this.game.players.enemy.gravity = gravity;
+      }
+    },
+    setTogglePause(toggle = true) {
+      this.game.settings.pause = toggle ? !this.game.settings.pause : false;
+    },
+    setWinner(name) {
+      if (name === "player") {
+        this.game.players.enemy.isDead = true;
+        this.game.settings.winner = this.game.players.player.name;
+      } else if (name === "enemy") {
+        this.game.players.enemy.isDead = true;
+        this.game.settings.winner = this.game.players.enemy.name;
+      }
+    },
+    setTime(time) {
+      if (time === "timeout") {
+        this.game.settings.fightTime = time;
+      } else {
+        this.game.settings.fightTime -= time;
+      }
+    },
+    setFramerate(val) {
+      this.game.settings.frameRate = val;
+    },
+    setPauseKey(val) {
+      this.game.settings.keys.pause = val;
+    },
+  },
 });

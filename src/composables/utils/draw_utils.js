@@ -1,4 +1,4 @@
-export function draw(ctx, user, frame, window) {
+export function draw(ctx, user, frame) {
   // Apply gravity
   user.position.y += user.velocity.y;
 
@@ -60,7 +60,7 @@ export function draw(ctx, user, frame, window) {
   // Do not go beyond the screen
   if (
     user.position.x + user.velocity.x >= 0 &&
-    user.position.x + user.width + user.velocity.x <= window.width
+    user.position.x + user.width + user.velocity.x <= window.innerWidth
   ) {
     user.position.x += user.velocity.x;
   } else {
@@ -199,8 +199,8 @@ export function drawShop(ctx, frame) {
 const background = new Image(); // Create background image()
 background.src = "src/assets/img/background/background.png";
 
-export function drawBackground(ctx, window) {
-  ctx.drawImage(background, 0, 0, window.width, window.height);
+export function drawBackground(ctx) {
+  ctx.drawImage(background, 0, 0, window.innerWidth, window.innerHeight);
 }
 
 // =================== ANIMATION =====================

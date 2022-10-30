@@ -1,8 +1,8 @@
 <template>
   <div class="background flex-column">
     <ul>
-      <li @click="playGame"><RouterLink to="/game">Play</RouterLink></li>
-      <!-- <li><RouterLink to="/online">Online mode</RouterLink></li> -->
+      <li @click="store.setTogglePause(false)"><RouterLink to="/game">Play</RouterLink></li>
+      <li><RouterLink to="/online">Online mode</RouterLink></li>
       <li><RouterLink to="/settings">Game settings</RouterLink></li>
       <li><RouterLink to="/about">About</RouterLink></li>
     </ul>
@@ -21,12 +21,6 @@ import { Store } from "@/stores/store";
 // ==============================
 const store = Store();
 
-// ==============================
-// Function
-// ==============================
-function playGame(){
-  store.game.settings.pause = false;
-}
 </script>
 
 <style lang="scss" scoped>

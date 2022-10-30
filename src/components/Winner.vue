@@ -15,7 +15,7 @@
   <template v-if="winner">
     <div class="absolute">
       <div class="flex-column">
-        <h1>{{ winner }} win!</h1>
+        <h1>{{ winner }} wins!</h1>
         <div class="top-12 flex-center">
           <RouterLink to="/">
             <Btn text="Menu" />
@@ -26,7 +26,7 @@
   </template>
 
   <template v-if="timeout">
-    <template v-if="store.game.players.player.health === store.game.players.enemy.health">
+    <template v-if="store.getPlayerHealth('player') === store.getPlayerHealth('enemy')">
       <div class="absolute">
         <div class="flex-column">
           <h1>It's a tie</h1>
@@ -43,10 +43,10 @@
       <div class="absolute">
         <div class="flex-column">
           <h1>{{ 
-          store.game.players.player.health > store.game.players.enemy.health
-            ? store.game.players.player.name
-            : store.game.players.enemy.name
-           }} win!</h1>
+          store.getPlayerHealth('player') > store.getPlayerHealth('enemy')
+            ? store.getPlayerName('player')
+            : store.getPlayerName('enemy')
+           }} wins!</h1>
           <div class="top-12 flex-center">
             <RouterLink to="/">
               <Btn text="Menu" />
@@ -82,37 +82,25 @@ const timeout = ref(false);
 
 // Watch timeout
 watch(
-  () => store.game.settings.fightTime,
-  () => {
-    if (store.game.settings.fightTime === "timeout") {
-      timeout.value = true;
-    } else {
-      timeout.value = false;
-    }
-  }
+  () => store.getFightTime,
+  ( time ) => timeout.value = time === "timeout" ? true : false
 );
 
 // Watch winner
 watch(
-  () => store.game.settings.winner,
-  () => {
-    if (store.game.settings.winner) {
-      winner.value = store.game.settings.winner;
-    }
-  }
+  () => store.getWinner,
+  ( player ) => winner.value = player
 );
 
 // Watch pause mode
 watch(
-  () => store.game.settings.pause,
-  () => {
-    pause.value = store.game.settings.pause ? true : false;
-  }
+  () => store.getPauseMode,
+  ( isPaused ) => pause.value = isPaused
 );
 
 function handleKeyDown(event) {
-  if (event.key === store.game.settings.keys.pause ) {
-    store.game.settings.pause = !store.game.settings.pause;
+  if (event.key === store.getPauseKey ) {
+    store.setTogglePause()
   }
 }
 // ==============================
@@ -122,7 +110,7 @@ onMounted(() => {
   document.addEventListener("keydown", handleKeyDown);
 });
 
-// remove event listener to prevent multiple listening and multiple execution of handleKeyDown()
+// Remove event listener to prevent multiple listening and multiple execution of handleKeyDown()
 onUnmounted(() => {
   document.removeEventListener("keydown", handleKeyDown);
 });

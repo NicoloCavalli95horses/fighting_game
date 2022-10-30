@@ -2,33 +2,33 @@
   <div class="relative"></div>
   <div class="wrapper">
     <div>
-      <h2>{{ store.game.players.player.name }}</h2>
+      <h2>{{ store.getPlayerName('player') }}</h2>
       <meter
         class="health"
-        min="0"
-        max="100"
-        low="30"
-        high="50"
-        optimum="70"
-        :value="store.game.players.player.health"
+        :min="0"
+        :max="100"
+        :low="30"
+        :high="50"
+        :optimum="70"
+        :value="store.getPlayerHealth('player')"
       />
-      <h4>{{ store.game.players.player.health }}%</h4>
+      <h4>{{ store.getPlayerHealth('player') }}%</h4>
     </div>
 
     <Clock />
 
     <div>
-      <h2>{{ store.game.players.enemy.name }}</h2>
+      <h2>{{ store.getPlayerName('enemy') }}</h2>
       <meter
         class="health"
-        min="0"
-        max="100"
-        low="30"
-        high="50"
-        optimum="70"
-        :value="store.game.players.enemy.health"
+        :min="0"
+        :max="100"
+        :low="30"
+        :high="50"
+        :optimum="70"
+        :value="store.getPlayerHealth('enemy')"
       />
-      <h4>{{ store.game.players.enemy.health }}%</h4>
+      <h4>{{ store.getPlayerHealth('enemy') }}%</h4>
     </div>
   </div>
 </template>
@@ -50,21 +50,19 @@ const store = Store();
 // Watcher
 // ==============================
 watch(
-  () => store.game.players.player.health,
-  () => {
-    if (store.game.players.player.health <= 0) {
-      store.game.players.player.isDead = true;
-      store.game.settings.winner = store.game.players.enemy.name;
+  () => store.getPlayerHealth('player'),
+  ( health ) => {
+    if ( health <= 0 ) {
+      store.setWinner('enemy');
     }
   }
 );
 
 watch(
-  () => store.game.players.enemy.health,
-  () => {
-    if (store.game.players.enemy.health <= 0) {
-      store.game.players.enemy.isDead = true;
-      store.game.settings.winner = store.game.players.player.name;
+  () => store.getPlayerHealth('enemy'),
+  ( health ) => {
+    if ( health <= 0 ) {
+      store.setWinner('player');
     }
   }
 );

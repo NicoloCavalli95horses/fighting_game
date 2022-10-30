@@ -36,7 +36,6 @@ const value = ref("");
 // Functions
 // ==============================
 function handleKeyup( e ) {
-  console.log(e.key)
   value.value = e.key
 }
 </script>

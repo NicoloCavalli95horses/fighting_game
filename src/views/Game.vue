@@ -1,11 +1,7 @@
 <template>
   <Winner />
   <HealthBar />
-  <canvas
-    :width="store.window.width"
-    :height="store.window.height"
-    id="canvas"
-  />
+  <canvas id="canvas" />
 </template>
 
 <script setup>
@@ -40,18 +36,29 @@ let frame = 0; // Track canvas frame iteration
 const pause_loop = ref();
 
 // ==============================
+// Props
+// ==============================
+const props = defineProps({
+  isOnline: Boolean,
+});
+
+// const emits = defineEmits(["update"]);
+
+// ==============================
 // Life cycle
 // ==============================
 onMounted(() => {
   const canvas = document.querySelector("canvas");
   const ctx = canvas.getContext("2d");
-  canvas.width = store.window.width;
-  canvas.height = store.window.height;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
   // Listen to keyboard event (keys are defined in the store)
-  handleKeyboardEvents(store.game.players.enemy);
   handleKeyboardEvents(store.game.players.player);
 
+  if ( !props.isOnline ) {
+    handleKeyboardEvents(store.game.players.enemy);
+  }
   interval = setInterval(updateCanvas, store.game.settings.frameRate, ctx);
 });
 

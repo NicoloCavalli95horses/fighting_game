@@ -1,10 +1,10 @@
 <template>
   <div class="clock-box">
-    <template v-if="store.game.settings.fightTime !== 'timeout'">
-      <h3>{{ store.game.settings.fightTime }}</h3>
+    <template v-if="store.getFightTime !== 'timeout'">
+      <h3>{{ store.getFightTime }}</h3>
     </template>
     <template v-else>
-      <p>{{ store.game.settings.fightTime }}</p>
+      <p>{{ store.getFightTime }}</p>
     </template>
   </div>
 </template>
@@ -27,11 +27,11 @@ let interval = null;
 // ==============================
 onMounted(() => {
   interval = setInterval(() => {
-    if (!store.game.settings.pause && !store.game.settings.winner) {
-      if (store.game.settings.fightTime > 1) {
-        store.game.settings.fightTime--;
+    if (!store.getPauseMode && !store.getWinner) {
+      if (store.getFightTime > 1) {
+        store.setTime(1);
       } else {
-        store.game.settings.fightTime = "timeout";
+        store.setTime("timeout");
       }
     }
   }, 1000);

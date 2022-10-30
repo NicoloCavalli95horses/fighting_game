@@ -1,5 +1,5 @@
 <template>
-  <button>
+  <button :class="{ 'disabled' : disabled }"> 
     <h3>{{ text }}</h3>
   </button>
 </template>
@@ -10,6 +10,7 @@
 // ==============================
 const props = defineProps({
   text: String,
+  disabled: Boolean
 });
 </script>
 
@@ -26,4 +27,13 @@ button {
     cursor: pointer;
   }
 }
+
+.disabled {
+    opacity: 0.5;
+    touch-action: none;
+    pointer-events: none;
+    &:hover {
+      filter: none;
+    }
+  }
 </style>
