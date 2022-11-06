@@ -1,5 +1,5 @@
 <template>
-  <div class="back"><RouterLink to="/">Back</RouterLink></div>
+  <!-- <div class="back"><RouterLink to="/">Back</RouterLink></div>
   <div class="page-bg">
     <div class="page-container">
       <h3>Chat</h3>
@@ -14,14 +14,15 @@
         <InputText placeholder="your message here" @update="val => text = val" @blur="send" />
       </div>
     </div>
-  </div>
+  </div> -->
+  <GameOnline />
 </template>
 
 <script setup>
 // ==============================
 // Import
 // ==============================
-import InputText from "../components/InputText.vue";
+import GameOnline from "../views/GameOnline.vue";
 import { onBeforeMount, onMounted, ref } from "@vue/runtime-core";
 import io from "socket.io-client";
 

@@ -51,7 +51,6 @@ export const Store = defineStore({
           },
           animation: {
             idle: {
-              image: new Image(),
               src: "src/assets/img/characters/samuraiMack/Idle",
               width: 1600,
               height: 200,
@@ -59,7 +58,6 @@ export const Store = defineStore({
               i: 1,
             },
             jump: {
-              image: new Image(),
               src: "src/assets/img/characters/samuraiMack/Jump",
               width: 400,
               height: 200,
@@ -67,7 +65,6 @@ export const Store = defineStore({
               i: 1,
             },
             fall: {
-              image: new Image(),
               src: "src/assets/img/characters/samuraiMack/Fall",
               width: 400,
               height: 200,
@@ -75,7 +72,6 @@ export const Store = defineStore({
               i: 1,
             },
             attack: {
-              image: new Image(),
               src: "src/assets/img/characters/samuraiMack/Attack1",
               width: 1200,
               height: 200,
@@ -83,7 +79,6 @@ export const Store = defineStore({
               i: 1,
             },
             run: {
-              image: new Image(),
               src: "src/assets/img/characters/samuraiMack/Run",
               width: 1600,
               height: 200,
@@ -91,7 +86,6 @@ export const Store = defineStore({
               i: 1,
             },
             death: {
-              image: new Image(),
               src: "src/assets/img/characters/samuraiMack/Death",
               width: 1200,
               height: 200,
@@ -99,7 +93,6 @@ export const Store = defineStore({
               i: 1,
             },
             hit: {
-              image: new Image(),
               src: "src/assets/img/characters/samuraiMack/Hit",
               width: 800,
               height: 200,
@@ -145,7 +138,6 @@ export const Store = defineStore({
           },
           animation: {
             idle: {
-              image: new Image(),
               src: "src/assets/img/characters/kenji/Idle",
               width: 800,
               height: 200,
@@ -153,7 +145,6 @@ export const Store = defineStore({
               i: 1,
             },
             jump: {
-              image: new Image(),
               src: "src/assets/img/characters/kenji/Jump",
               width: 400,
               height: 200,
@@ -161,7 +152,6 @@ export const Store = defineStore({
               i: 1,
             },
             attack: {
-              image: new Image(),
               src: "src/assets/img/characters/kenji/Attack1",
               width: 800,
               height: 200,
@@ -169,7 +159,6 @@ export const Store = defineStore({
               i: 1,
             },
             fall: {
-              image: new Image(),
               src: "src/assets/img/characters/kenji/Fall",
               width: 400,
               height: 200,
@@ -177,7 +166,6 @@ export const Store = defineStore({
               i: 1,
             },
             run: {
-              image: new Image(),
               src: "src/assets/img/characters/kenji/Run",
               width: 1600,
               height: 200,
@@ -185,7 +173,6 @@ export const Store = defineStore({
               i: 1,
             },
             death: {
-              image: new Image(),
               src: "src/assets/img/characters/kenji/Death",
               width: 1400,
               height: 200,
@@ -193,7 +180,6 @@ export const Store = defineStore({
               i: 1,
             },
             hit: {
-              image: new Image(),
               src: "src/assets/img/characters/kenji/Hit",
               width: 600,
               height: 200,
@@ -206,6 +192,12 @@ export const Store = defineStore({
     },
   }),
   getters: {
+    getPlayer(){
+      return this.game.players.player
+    },
+    getEnemy(){
+      return this.game.players.enemy
+    },
     getPlayerName() {
       return (name) => {
         if (name === "player") {
@@ -296,7 +288,7 @@ export const Store = defineStore({
         this.game.players.enemy.isDead = true;
         this.game.settings.winner = this.game.players.player.name;
       } else if (name === "enemy") {
-        this.game.players.enemy.isDead = true;
+        this.game.players.player.isDead = true;
         this.game.settings.winner = this.game.players.enemy.name;
       }
     },
