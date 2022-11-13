@@ -88,7 +88,7 @@ function updateCanvas() {
       enemy: store.getEnemy
     });
 
-    // Handle collisions and subtract health
+    // Handle collisions and subtract health if time is not out
     reactToCollision({
       player: store.getPlayer,
       enemy: store.getEnemy,
@@ -144,19 +144,19 @@ function drawPlayer({ user }) {
     //   user.attackBox.width,
     //   user.attackBox.height
     // );
-    drawAnimation(user, user.animation.attack, 10, true);
+    drawAnimation({ user, animation: user.animation.attack, speed: 10, idle_after: true });
   } else if (user.state == "running") {
-    drawAnimation(user, user.animation.run);
+    drawAnimation({ user, animation: user.animation.run });
   } else if (user.state == "jumping") {
-    drawAnimation(user, user.animation.jump);
+    drawAnimation({ user, animation: user.animation.jump });
   } else if (user.state == "falling") {
-    drawAnimation(user, user.animation.fall);
+    drawAnimation({ user, animation: user.animation.fall });
   } else if (user.state == "dead") {
-    drawOneTimeAnimation(user, user.animation.death);
+    drawAnimation({ user, animation: user.animation.death, stop_after: true });
   } else if (user.state == "hit") {
-    drawAnimation(user, user.animation.hit, 20, true);
+    drawAnimation({ user, animation: user.animation.hit, speed: 20, idle_after: true });
   } else {
-    drawAnimation(user, user.animation.idle);
+    drawAnimation({ user, animation: user.animation.idle });
   }
 
   // Handle attackBox position while user is moving
@@ -268,7 +268,7 @@ function onKeyboard(user) {
 }
 
 /**
- * Players always have to look at each other. Toggle 'mirror' values if players position are swapped
+ * Players always have to look at each other. Toggle 'mirror' values to swap players x position
  * @param {Object} player
  * @param {Object} enemy
  */
@@ -290,6 +290,12 @@ function handleDirection({ player, enemy }) {
   }
 }
 
+/**
+ * 
+ * @param {object} player 
+ * @param {object} enemy 
+ * Return whether or not there is a collision between two players
+ */
 function detectCollision(player, enemy) {
   return (
     player.attackBox.position.x + player.attackBox.width >= enemy.position.x &&
@@ -300,6 +306,11 @@ function detectCollision(player, enemy) {
   );
 }
 
+/**
+ * 
+ * @param {object} user
+ * Adjust attack box (x, y) position of a player
+ */
 function handleAttackBox(user) {
   user.attackBox.position.x = user.position.x + user.attackBox.offset;
   user.attackBox.position.y = user.position.y;
@@ -321,15 +332,16 @@ function drawBackground() {
  * @param {Object} speed - the speed of the animation
  */
 function drawDecoration({ obj, x_pos, y_pos, scale, speed }) {
+  const frameWidth = (obj.width / obj.max_frames);
   ctx.value.drawImage(
     obj,
-    obj.i * (obj.width / obj.max_frames), // cropping X (each iteration, scroll horizontally by a frame)
+    obj.i * frameWidth, // cropping X (each iteration, scroll horizontally by a frame)
     0, // cropping Y (remain the same)
     obj.width / obj.max_frames,
     obj.height,
     x_pos, // X position on the canvas of the whole image
     y_pos, // Y position on the canvas of the whole image
-    (obj.width / obj.max_frames) * scale, // width of the whole image
+    frameWidth * scale, // width of the whole image
     obj.height * scale // height of the whole image
   );
 
@@ -339,20 +351,26 @@ function drawDecoration({ obj, x_pos, y_pos, scale, speed }) {
   }
 }
  
-function drawAnimation(
-  user,
-  animation,
-  speed = 15,
-  one_animation_then_idle = false
-) {
+/**
+ * @param {object} user - x, y position
+ * @param {object} animation - src, width, height, total, i
+ * @param {number} speed - fps
+ * @param {boolean} idle_after - switch to idle animation after once
+ */
+function drawAnimation({ user, animation, speed = 15, idle_after = false, stop_after = false }) {
+  
+  // Create 'image' key and store a new image object in it 
   animation.image = new Image();
-  animation.image.src = user.mirror
-    ? animation.src + "_rev.png"
-    : animation.src + ".png";
+
+  // Set src format
+  animation.image.src = ( user.mirror && !stop_after ) ? animation.src + "_rev.png" : animation.src + ".png";
+
+  // Single frame width
+  const frameWidth = (animation.width / animation.total);
 
   ctx.value.drawImage(
     animation.image,
-    animation.i * (animation.width / animation.total),
+    animation.i * frameWidth,
     0,
     animation.width / animation.total,
     animation.height,
@@ -362,44 +380,32 @@ function drawAnimation(
     animation.height * 3
   );
 
-  if (frame.value % speed === 0) {
-    if (!one_animation_then_idle) {
-      animation.i = animation.i == animation.total - 1 ? 1 : animation.i + 1;
-    } else {
+  // Stop any animation ('dead' state)
+  if ( stop_after ) {
+    if ( frame.value % speed === 0 ) {
       if (animation.i == animation.total - 1) {
-        animation.i = 1;
-        user.state = "idle";
-        user.canAttack = true;
         return;
       } else {
         animation.i = animation.i + 1;
-        user.canAttack = false;
       }
     }
-  }
-}
-
-function drawOneTimeAnimation(user, animation, speed = 15) {
-  animation.image = new Image();
-  animation.image.src = animation.src + ".png";
-
-  ctx.value.drawImage(
-    animation.image,
-    animation.i * (animation.width / animation.total),
-    0,
-    animation.width / animation.total,
-    animation.height,
-    user.position.x - 330,
-    user.position.y - 255,
-    (animation.width / animation.total) * 3.5,
-    animation.height * 3.5
-  );
-
-  if (frame.value % speed === 0) {
-    if (animation.i == animation.total - 1) {
-      return;
-    } else {
-      animation.i = animation.i + 1;
+  } else {
+    // Repeat the same animation or switch to idle default animation
+    if ( frame.value % speed === 0 ) {
+      if ( !idle_after ) {
+        // Increase counter and move to the next png frame
+        animation.i = animation.i == animation.total - 1 ? 1 : animation.i + 1;
+      } else {
+        if ( animation.i == ( animation.total - 1 ) ) {
+          animation.i = 1;
+          user.state = "idle";
+          user.canAttack = true;
+          return;
+        } else {
+          animation.i = animation.i + 1;
+          user.canAttack = false;
+        }
+      }
     }
   }
 }
