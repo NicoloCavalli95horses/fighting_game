@@ -42,7 +42,7 @@ const value = ref("");
 
     &::placeholder {
       filter: grayscale(60%);
-      opacity: 0.3;
+      opacity: 0.7;
     }
 
     &:focus {

@@ -15,7 +15,7 @@
       <h4>{{ store.getPlayerHealth('player') }}%</h4>
     </div>
 
-    <Clock />
+    <Clock v-if="show_clock" />
 
     <div>
       <h2>{{ store.getPlayerName('enemy') }}</h2>
@@ -45,6 +45,13 @@ import { watch } from "@vue/runtime-core";
 // Variables
 // ==============================
 const store = Store();
+
+// ==============================
+// Props
+// ==============================
+defineProps({
+  show_clock: Boolean
+})
 
 // ==============================
 // Watcher

@@ -55,7 +55,7 @@ onMounted(() => {
   onKeyboard(store.getEnemy);
 
   // Main game loop
-  interval = setInterval(updateCanvas, store.getFramerate);
+  interval = setInterval( updateCanvas, store.getFramerate );
 });
 
 // Stop loop and reset store properties
@@ -137,23 +137,18 @@ function drawPlayer({ user }) {
   user.position.y += user.velocity.y;
 
   // Show animations
-  if (user.state == "attacking") {
-    // ctx.fillRect(
-    //   user.attackBox.position.x,
-    //   user.attackBox.position.y,
-    //   user.attackBox.width,
-    //   user.attackBox.height
-    // );
+  if (user.state === "attacking") {
+    // drawAttackBox();
     drawAnimation({ user, animation: user.animation.attack, speed: 10, idle_after: true });
-  } else if (user.state == "running") {
+  } else if (user.state === "running") {
     drawAnimation({ user, animation: user.animation.run });
-  } else if (user.state == "jumping") {
+  } else if (user.state === "jumping") {
     drawAnimation({ user, animation: user.animation.jump });
-  } else if (user.state == "falling") {
+  } else if (user.state === "falling") {
     drawAnimation({ user, animation: user.animation.fall });
-  } else if (user.state == "dead") {
+  } else if (user.state === "dead") {
     drawAnimation({ user, animation: user.animation.death, stop_after: true });
-  } else if (user.state == "hit") {
+  } else if (user.state === "hit") {
     drawAnimation({ user, animation: user.animation.hit, speed: 20, idle_after: true });
   } else {
     drawAnimation({ user, animation: user.animation.idle });
@@ -291,7 +286,6 @@ function handleDirection({ player, enemy }) {
 }
 
 /**
- * 
  * @param {object} player 
  * @param {object} enemy 
  * Return whether or not there is a collision between two players
@@ -307,13 +301,25 @@ function detectCollision(player, enemy) {
 }
 
 /**
- * 
  * @param {object} user
  * Adjust attack box (x, y) position of a player
  */
 function handleAttackBox(user) {
   user.attackBox.position.x = user.position.x + user.attackBox.offset;
   user.attackBox.position.y = user.position.y;
+}
+
+/**
+ * @param {object} user
+ * Display attack box for debugging purposes 
+ */
+function drawAttackBox(user){
+  ctx.value.fillRect(
+    user.attackBox.position.x,
+    user.attackBox.position.y,
+    user.attackBox.width,
+    user.attackBox.height
+  );
 }
 
 /**

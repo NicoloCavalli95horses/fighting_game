@@ -13,15 +13,32 @@ const server = require("socket.io")(Http, {
 });
 const PORT = 3000;
 
-
 // ==============================
 // Socket settings
 // ==============================
 
 server.on('connection', client => { 
-  client.on('sendPlayerData', data => { 
-    client.broadcast.emit( 'sharePlayerData', data ); // send data to other players except the sender
+
+  client.on('change_player_velocity_x', data => { 
+    server.emit( 'player_velocity_x', data ); // send data to all the players
   });
+
+  client.on('change_player_velocity_y', data => { 
+    server.emit( 'player_velocity_y', data );
+  });
+
+  client.on('change_player_position_x', data => { 
+    server.emit( 'player_position_x', data );
+  });
+
+  client.on('change_player_position_y', data => { 
+    server.emit( 'player_position_y', data );
+  });
+
+  client.on('change_player_state', data => { 
+    server.emit( 'player_state', data );
+  });
+
 });
 
 
