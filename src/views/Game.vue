@@ -169,76 +169,8 @@ function onKeyboard( player, enemy ) {
       return;
     }
 
-    switch ( e.key ) {
-      // Left
-      case player.keys.left:
-        if (player.state !== "attacking") {
-          player.velocity.x = -5;
-        }
-        if ( e.key != player.lastKey ) {
-          player.lastKey = e.key
-        }
-        break;
-      case enemy.keys.left:
-        if (enemy.state !== "attacking") {
-          enemy.velocity.x = -5;
-        }
-        if ( e.key != enemy.lastKey ) {
-          enemy.lastKey = e.key
-        }
-        break;
-      // Right
-      case player.keys.right:
-        if (player.state !== "attacking") {
-          player.velocity.x = 5;
-        }
-        if ( e.key != player.lastKey ) {
-          player.lastKey = e.key
-        }
-        break;
-      case enemy.keys.right:
-        if ( enemy.state !== "attacking" ) {
-          enemy.velocity.x = 5;
-        }
-        if ( e.key != enemy.lastKey ) {
-          enemy.lastKey = e.key
-        }
-        break;
-      // Up
-      case player.keys.up:
-        if ( player.position.y > window.innerHeight / 2 ) {
-          player.velocity.y = -20;
-        }
-        if ( e.key != player.lastKey ) {
-          player.lastKey = e.key
-        }
-        break;
-      case enemy.keys.up:
-        if ( enemy.position.y > window.innerHeight / 2 ) {
-          enemy.velocity.y = -20;
-        }
-        if ( e.key != enemy.lastKey ) {
-          enemy.lastKey = e.key
-        }
-        break;
-      // Attack
-      case player.keys.attack:
-        if ( player.state !== "running" ) {
-          player.state = "attacking";
-        }
-        if ( e.key != player.lastKey ) {
-          player.lastKey = e.key
-        }
-        break;
-      case enemy.keys.attack:
-        if ( enemy.state !== "running" ) {
-          enemy.state = "attacking";
-        }
-        if ( e.key != enemy.lastKey ) {
-          enemy.lastKey = e.key
-        }
-        break;
-    }
+    handleKey({ key: e.key, user: player });
+    handleKey({ key: e.key, user: enemy });
   });
 
   window.addEventListener("keyup", (e) => {
@@ -261,6 +193,41 @@ function onKeyboard( player, enemy ) {
 }
 
 /**
+ * Handle keyboard events
+ * @param {string} key
+ * @param {user} object 
+ */
+function handleKey({ key, user }){
+  switch ( key ) {
+      // Left
+      case user.keys.left:
+          user.velocity.x = -5;
+          user.lastKey = key;
+        break;
+      
+      // Right
+      case user.keys.right:
+          user.velocity.x = 5;
+          user.lastKey = key;
+        break;
+
+      // Up
+      case user.keys.up:
+        if ( user.position.y > window.innerHeight / 2 ) {
+          user.velocity.y = -20;
+        }
+          user.lastKey = key;
+        break;
+
+      // Attack
+      case user.keys.attack:
+          user.state = "attacking";
+          user.lastKey = key;
+        break;
+    }
+}
+
+/**
  * Set user state between "jumping, falling, running, idle, dead" and draw animation
  * @param {Object} user 
  */
@@ -274,7 +241,7 @@ function setStateAndAnimate( user ) {
     } else if ( user.position.y < 535 ) {
       user.state = "falling";
       drawAnimation({ user, animation: user.animation.fall });
-    } else {
+    } else if ( user.state != "attacking" && user.state != "hit" && user.state != "dead") {
       user.state = "idle";
       drawAnimation({ user, animation: user.animation.idle });
     }
