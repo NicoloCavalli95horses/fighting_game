@@ -45,22 +45,21 @@ shop.i = 1;
 // Life cycle
 // ==============================
 onMounted(() => {
-  canvas.value = document.querySelector("canvas");
-  ctx.value = canvas.value.getContext("2d");
+  canvas.value = document.querySelector( "canvas" );
+  ctx.value = canvas.value.getContext( "2d" );
   canvas.value.width = window.innerWidth;
   canvas.value.height = window.innerHeight;
 
-  // Listen to keyboard event (keys are defined in the store)
-  onKeyboard(store.getPlayer);
-  onKeyboard(store.getEnemy);
+  // Listen to keyboard event
+  onKeyboard( store.getPlayer, store.getEnemy );
 
   // Main game loop
   interval = setInterval( updateCanvas, store.getFramerate );
 });
 
 // Stop loop and reset store properties
-onUnmounted(() => {
-  clearInterval(interval);
+onUnmounted( () => {
+  clearInterval( interval );
   store.$reset();
 });
 
@@ -75,7 +74,7 @@ function updateCanvas() {
     drawDecoration({ 
       obj: shop,
       x_pos: 1000,
-      y_pos: 250,
+      y_pos: 240,
       scale: 3,
       speed: 15 
     });
@@ -83,6 +82,7 @@ function updateCanvas() {
     // Draw the players (handle: gravity, attackBox, jumping, left/right, screen borders,)
     drawPlayer({ user: store.getPlayer });
     drawPlayer({ user: store.getEnemy });
+
     handleDirection({ 
       player: store.getPlayer,
       enemy: store.getEnemy
@@ -107,7 +107,7 @@ function updateCanvas() {
  * @param {Object} time
  */
 function reactToCollision({ player, enemy, time }) {
-  if (detectCollision(player, enemy) && player.canAttack && time != "timeout") {
+  if ( detectCollision( player, enemy ) && player.canAttack && time != "timeout" ) {
     player.canAttack = false;
     enemy.state = "hit";
     if (enemy.health >= player.strenght) {
@@ -117,10 +117,10 @@ function reactToCollision({ player, enemy, time }) {
     }
   }
 
-  if (detectCollision(enemy, player) && enemy.canAttack && time != "timeout") {
+  if ( detectCollision( enemy, player ) && enemy.canAttack && time != "timeout" ) {
     enemy.canAttack = false;
     player.state = "hit";
-    if (player.health >= enemy.strenght) {
+    if ( player.health >= enemy.strenght ) {
       player.health -= enemy.strenght;
     } else {
       player.health = 0;
@@ -136,61 +136,21 @@ function drawPlayer({ user }) {
   // Apply gravity
   user.position.y += user.velocity.y;
 
-  // Show animations
-  if (user.state === "attacking") {
-    // drawAttackBox();
-    drawAnimation({ user, animation: user.animation.attack, speed: 10, idle_after: true });
-  } else if (user.state === "running") {
-    drawAnimation({ user, animation: user.animation.run });
-  } else if (user.state === "jumping") {
-    drawAnimation({ user, animation: user.animation.jump });
-  } else if (user.state === "falling") {
-    drawAnimation({ user, animation: user.animation.fall });
-  } else if (user.state === "dead") {
-    drawAnimation({ user, animation: user.animation.death, stop_after: true });
-  } else if (user.state === "hit") {
-    drawAnimation({ user, animation: user.animation.hit, speed: 20, idle_after: true });
-  } else {
-    drawAnimation({ user, animation: user.animation.idle });
-  }
+  // Set user state and animate
+  setStateAndAnimate( user );
 
   // Handle attackBox position while user is moving
-  handleAttackBox(user);
+  handleAttackBox( user );
 
   // Handle jumping behaviour
-  if (user.position.y + user.height + user.velocity.y >= 690) {
+  if ( user.position.y + user.height + user.velocity.y >= 690 ) {
     user.velocity.y = 0;
   } else {
     user.velocity.y += user.gravity;
   }
 
-  // Switch between animations
-  if (user.velocity.y < 0) {
-    user.state = "jumping";
-  } else if (
-    user.velocity.y > 0 &&
-    user.position.y < 535 &&
-    user.state != "running"
-  ) {
-    user.state = "falling";
-  } else if (
-    user.state != "running" &&
-    user.state != "jumping" &&
-    user.state != "attacking" &&
-    user.state != "hit"
-  ) {
-    user.state = "idle";
-  }
-
-  if (user.health <= 0) {
-    user.state = "dead";
-  }
-
   // Do not go beyond the screen
-  if (
-    user.position.x + user.velocity.x >= 0 &&
-    user.position.x + user.width + user.velocity.x <= window.innerWidth
-  ) {
+  if ( user.position.x + user.velocity.x >= 0 && user.position.x + user.width + user.velocity.x <= window.innerWidth ){
     user.position.x += user.velocity.x;
   } else {
     user.velocity.x = 0;
@@ -198,68 +158,140 @@ function drawPlayer({ user }) {
 }
 
 /**
- * @param { Object } user
+ * @param { Object } player
+ * @param { Object } enemy
  * Handle keyboard event for a user
  */
-function onKeyboard(user) {
-  window.addEventListener("keydown", (e) => {
-    if (user.isDead) {
-      return;
-    } else {
-      if (e.key !== user.lastKey) {
-        user.lastKey = e.key;
-      }
+function onKeyboard( player, enemy ) { 
 
-      switch (user.lastKey) {
-        // Left
-        case user.keys.left:
-          if (user.state !== "attacking") {
-            user.state = "running";
-            user.velocity.x = -5;
-          }
-          break;
-        // Right
-        case user.keys.right:
-          if (user.state !== "attacking") {
-            user.state = "running";
-            user.velocity.x = 5;
-          }
-          break;
-        // Up
-        case user.keys.up:
-          if (user.position.y > window.innerHeight / 2) user.velocity.y = -20;
-          break;
-        // Attack
-        case user.keys.attack:
-          if (user.state !== "running") {
-            user.state = "attacking";
-          }
-          break;
-      }
+  window.addEventListener( "keydown", e => {
+    if ( player.isDead || enemy.isDead ) {
+      return;
+    }
+
+    switch ( e.key ) {
+      // Left
+      case player.keys.left:
+        if (player.state !== "attacking") {
+          player.velocity.x = -5;
+        }
+        if ( e.key != player.lastKey ) {
+          player.lastKey = e.key
+        }
+        break;
+      case enemy.keys.left:
+        if (enemy.state !== "attacking") {
+          enemy.velocity.x = -5;
+        }
+        if ( e.key != enemy.lastKey ) {
+          enemy.lastKey = e.key
+        }
+        break;
+      // Right
+      case player.keys.right:
+        if (player.state !== "attacking") {
+          player.velocity.x = 5;
+        }
+        if ( e.key != player.lastKey ) {
+          player.lastKey = e.key
+        }
+        break;
+      case enemy.keys.right:
+        if ( enemy.state !== "attacking" ) {
+          enemy.velocity.x = 5;
+        }
+        if ( e.key != enemy.lastKey ) {
+          enemy.lastKey = e.key
+        }
+        break;
+      // Up
+      case player.keys.up:
+        if ( player.position.y > window.innerHeight / 2 ) {
+          player.velocity.y = -20;
+        }
+        if ( e.key != player.lastKey ) {
+          player.lastKey = e.key
+        }
+        break;
+      case enemy.keys.up:
+        if ( enemy.position.y > window.innerHeight / 2 ) {
+          enemy.velocity.y = -20;
+        }
+        if ( e.key != enemy.lastKey ) {
+          enemy.lastKey = e.key
+        }
+        break;
+      // Attack
+      case player.keys.attack:
+        if ( player.state !== "running" ) {
+          player.state = "attacking";
+        }
+        if ( e.key != player.lastKey ) {
+          player.lastKey = e.key
+        }
+        break;
+      case enemy.keys.attack:
+        if ( enemy.state !== "running" ) {
+          enemy.state = "attacking";
+        }
+        if ( e.key != enemy.lastKey ) {
+          enemy.lastKey = e.key
+        }
+        break;
     }
   });
 
   window.addEventListener("keyup", (e) => {
-    if (user.isDead) {
+    if ( player.isDead || enemy.isDead ) {
       return;
-    } else {
-      if (e.key !== user.lastKey) {
-        user.lastKey = e.key;
-      }
-      switch (user.lastKey) {
-        // Left
-        case user.keys.left:
-          user.state = "idle";
-          user.velocity.x = 0;
-          break;
-        // Right
-        case user.keys.right:
-          user.state = "idle";
-          user.velocity.x = 0;
-          break;
-      }
+    } 
+
+    if ( e.key == player.keys.left || e.key == player.keys.right ) {
+      player.state = "idle";
+      player.velocity.x = 0;
+      player.lastKey = null;
+    }
+
+    if ( e.key == enemy.keys.left || e.key == enemy.keys.right ) {
+      enemy.state = "idle";
+      enemy.velocity.x = 0;
+      enemy.lastKey = null;
     }
   });
+}
+
+/**
+ * Set user state between "jumping, falling, running, idle, dead" and draw animation
+ * @param {Object} user 
+ */
+function setStateAndAnimate( user ) {
+  if ( user.velocity.y < 0 ) {
+      user.state = "jumping";
+      drawAnimation({ user, animation: user.animation.jump });
+    } else if ( user.lastKey == user.keys.left || user.lastKey == user.keys.right ) {
+      user.state = "running"
+      drawAnimation({ user, animation: user.animation.run });
+    } else if ( user.position.y < 535 ) {
+      user.state = "falling";
+      drawAnimation({ user, animation: user.animation.fall });
+    } else {
+      user.state = "idle";
+      drawAnimation({ user, animation: user.animation.idle });
+    }
+    
+    if ( user.health <= 0 ) {
+      user.state = "dead";
+      drawAnimation({ user, animation: user.animation.death, stop_after: true });
+    }
+
+    if ( user.state == "attacking" ) {
+      // drawAttackBox();
+      drawAnimation({ user, animation: user.animation.attack, speed: 10, idle_after: true });
+    } 
+
+    if ( user.state == "hit" ) {
+      drawAnimation({ user, animation: user.animation.hit, speed: 20, idle_after: true });
+    }
 }
 
 /**

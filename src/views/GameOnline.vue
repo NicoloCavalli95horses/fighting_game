@@ -116,11 +116,11 @@ function updateCanvas() {
     });
 
     // Handle collisions and subtract health if time is not out
-    reactToCollision({
-      player: store.getPlayer,
-      enemy: store.getEnemy,
-      time: store.getFightTime
-    });
+    // reactToCollision({
+    //   player: store.getPlayer,
+    //   enemy: store.getEnemy,
+    //   time: store.getFightTime
+    // });
 
     // Update frame count
     frame.value++;
@@ -249,7 +249,7 @@ function onKeyboard(user) {
         // Right
         case user.keys.right:
           if (user.state !== "attacking") {
-            socket.value.emit('change_player_velocity_x', 5 );
+            socket.value.emit('change_player_velocity_x', 5);
             socket.value.emit('change_player_state', 'running');
           }
           break;
@@ -258,7 +258,6 @@ function onKeyboard(user) {
           if (user.position.y > window.innerHeight / 2) {
             socket.value.emit('change_player_velocity_y', -20);
           }
-          
           break;
         // Attack
         case user.keys.attack:

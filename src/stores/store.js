@@ -234,6 +234,15 @@ export const Store = defineStore({
         }
       };
     },
+    getPlayerState() {
+      return (player) => {
+        if (player === "player") {
+          return this.game.players.player.state;
+        } else if (player === "enemy") {
+          return this.game.players.enemy.state;
+        }
+      }
+    },
     getFightTime() {
       return this.game.settings.fightTime;
     },
