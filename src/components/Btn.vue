@@ -1,6 +1,6 @@
 <template>
   <button :class="{ 'disabled' : disabled }"> 
-    <h3>{{ text }}</h3>
+      <h3>{{ text }}</h3>
   </button>
 </template>
 
@@ -10,7 +10,7 @@
 // ==============================
 const props = defineProps({
   text: String,
-  disabled: Boolean
+  disabled: Boolean,
 });
 </script>
 

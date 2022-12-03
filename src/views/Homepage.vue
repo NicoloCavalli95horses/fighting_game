@@ -1,11 +1,18 @@
 <template>
-  <div class="background flex-column">
-    <ul>
-      <li @click="store.setTogglePause(false)"><RouterLink to="/game">Play</RouterLink></li>
-      <li><RouterLink to="/online">Online mode</RouterLink></li>
-      <li><RouterLink to="/settings">Game settings</RouterLink></li>
-      <li><RouterLink to="/about">About</RouterLink></li>
-    </ul>
+  <div class="background">
+
+    <div class="flex-column h-100 w-100">
+      <h1 class="bottom-24">The last warrior</h1>
+      <RouterLink to="/choosePlayers">
+        <Btn text="play" />
+      </RouterLink>
+    </div>
+
+    <div class="top-right flex-center">
+      <RouterLink to="/settings"><span class="r-24"><font-awesome-icon icon="fa-solid fa-gear" /></span></RouterLink>
+      <RouterLink to="/about"><font-awesome-icon icon="fa-solid fa-circle-info" /></RouterLink>
+    </div>
+    
   </div>
 </template>
 
@@ -15,12 +22,16 @@
 // ==============================
 import { RouterLink, RouterView } from "vue-router";
 import { Store } from "@/stores/store";
+import Btn from '../components/Btn.vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faGear } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 // ==============================
 // Consts
 // ==============================
 const store = Store();
-
+library.add(faGear, faCircleInfo);
 </script>
 
 <style lang="scss" scoped>
@@ -28,21 +39,15 @@ const store = Store();
   width: 100%;
   height: 100vh;
   background-color: #111;
-  ul {
-    text-align: center;
+
+  h1 {
+    font-size: 55px;
   }
 
-  li {
-    font-size: 28px;
-    padding: 20px;
-    &:not(:last-child) {
-      border-bottom: 2px solid orangered;
-    }
-    &:hover {
-      cursor: pointer;
-      transition-duration: 600ms;
-      filter: brightness(120%);
-    }
+  .top-right {
+    position: absolute;
+    right: 22px;
+    top: 22px;
   }
 }
 </style>

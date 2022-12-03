@@ -72,9 +72,9 @@ import { RouterLink, RouterView } from "vue-router";
 // Variables
 // ==============================
 const store = Store();
-const winner = ref(false);
-const pause = ref(false);
-const timeout = ref(false);
+const winner = ref( false );
+const pause = ref( false );
+const timeout = ref( false );
 
 // ==============================
 // Watcher
@@ -83,13 +83,19 @@ const timeout = ref(false);
 // Watch timeout
 watch(
   () => store.getFightTime,
-  ( time ) => timeout.value = time === "timeout" ? true : false
+  ( time ) => {
+    timeout.value = time == "timeout" ? true : false
+    document.removeEventListener("keydown", handleKeyDown);
+  }
 );
 
 // Watch winner
 watch(
   () => store.getWinner,
-  ( player ) => winner.value = player
+  ( player ) => {
+    winner.value = player
+    document.removeEventListener("keydown", handleKeyDown);
+  }
 );
 
 // Watch pause mode
@@ -99,7 +105,7 @@ watch(
 );
 
 function handleKeyDown(event) {
-  if (event.key === store.getPauseKey ) {
+  if ( event.key == store.getPauseKey ) {
     store.setTogglePause()
   }
 }
@@ -116,7 +122,7 @@ onUnmounted(() => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .absolute {
   z-index: 20;
   position: absolute;

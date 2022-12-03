@@ -15,9 +15,9 @@ const router = createRouter({
       component: () => import('../views/Game.vue'),
     },
     {
-      path: "/online",
-      name: "online",
-      component: () => import('../views/Online.vue'),
+      path: "/ChoosePlayers",
+      name: "choosePlayers",
+      component: () => import('../views/ChoosePlayers.vue'),
     },
     {
       path: "/settings",

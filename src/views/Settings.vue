@@ -60,7 +60,7 @@
           <InputRange
             :start="store.getPlayerHealth('player')"
             :min="1"
-            :max="500"
+            :max="store.game.settings.maxValues.health"
             @value="(health) => store.setPlayerHealth('player', health)"
           />
         </div>

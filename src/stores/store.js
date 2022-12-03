@@ -12,6 +12,10 @@ export const Store = defineStore({
         keys: {
           pause: "p",
         },
+        maxValues: {
+          health: 200,
+          strenght: 10,
+        }
       },
       players: {
         player: {
@@ -125,7 +129,7 @@ export const Store = defineStore({
           canAttack: true,
           isDead: false,
           mirror: false,
-          health: 100,
+          health: 180,
           strenght: 5,
           attackBox: {
             position: {
@@ -302,10 +306,10 @@ export const Store = defineStore({
       }
     },
     setTime(time) {
-      if (time === "timeout") {
+      if (time == "timeout") {
         this.game.settings.fightTime = time;
       } else {
-        this.game.settings.fightTime -= time;
+        this.game.settings.fightTime = time;
       }
     },
     setFramerate(val) {

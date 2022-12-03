@@ -1,10 +1,10 @@
 <template>
   <div class="clock-box">
-    <template v-if="store.getFightTime !== 'timeout'">
-      <h3>{{ store.getFightTime }}</h3>
+    <template v-if="isNaN(time)">
+      <p> {{ time }} </p>
     </template>
     <template v-else>
-      <p>{{ store.getFightTime }}</p>
+      <h3> {{ time }} </h3>
     </template>
   </div>
 </template>
@@ -13,7 +13,7 @@
 // ==============================
 // Import
 // ==============================
-import { onMounted, onUnmounted } from "@vue/runtime-core";
+import { onMounted, onUnmounted, ref } from "@vue/runtime-core";
 import { Store } from "@/stores/store";
 
 // ==============================
@@ -21,17 +21,21 @@ import { Store } from "@/stores/store";
 // ==============================
 const store = Store();
 let interval = null;
+const time = ref( null );
 
 // ==============================
 // Life cycle
 // ==============================
 onMounted(() => {
+  time.value = store.getFightTime;
+  
   interval = setInterval(() => {
     if (!store.getPauseMode && !store.getWinner) {
-      if (store.getFightTime > 1) {
-        store.setTime(1);
+      if (time.value > 1) {
+        time.value --;
       } else {
         store.setTime("timeout");
+        time.value = store.getFightTime;
       }
     }
   }, 1000);
@@ -47,10 +51,10 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
+  max-width: 100px;
   height: 100px;
   border-radius: 20%;
-  background-color: unset;
+  background-color: transparent !important;
   h3 {
     font-size: 38px;
   }

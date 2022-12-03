@@ -1,6 +1,6 @@
 <template>
   <Winner />
-  <HealthBar />
+  <HealthBar :show_clock="true" />
   <canvas />
 </template>
 

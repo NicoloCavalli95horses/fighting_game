@@ -75,7 +75,7 @@ watch(
 );
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $transition-duration: 500ms;
 $transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 $background: rgba(0, 0, 0, 0.1);
