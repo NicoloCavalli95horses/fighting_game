@@ -1,13 +1,18 @@
 <template>
   <div 
-    v-for="n in totPlayers"
-    :key="n"
+    v-for="img in imgs"
+    :key="img.id"
     class="sel-box"
     :class="{ 
-      'player-active' : playerSelection == n && playerSelection != enemySelection,
-      'enemy-active' : enemySelection == n && playerSelection != enemySelection,
-      'double-active' : n == playerSelection && playerSelection == enemySelection
+      'player-active' : playerSelection == img.id && playerSelection != enemySelection,
+      'enemy-active' : enemySelection == img.id && playerSelection != enemySelection,
+      'double-active' : img.id == playerSelection && playerSelection == enemySelection
       }"
+    :style="{ 
+      'background-image' : 'url('+ img.src +')',
+      'background-position' : img.position,
+      'background-size' : img.zoom
+       }"    
     >
   </div>
 </template>
@@ -19,15 +24,21 @@
 import { onMounted, onUnmounted, ref } from "@vue/runtime-core";
 
 // ==============================
-// Props
+// Props and emits
 // ==============================
+const props = defineProps({
+  imgs: Object,
+  player: Number,
+  enemy: Number,
+});
+
+const emit = defineEmits(["keydown"]);
 
 // ==============================
-// Props
+// Consts
 // ==============================
-const totPlayers = 6;
-const playerSelection = ref( 1 );
-const enemySelection = ref( 1 );
+const playerSelection = ref( props.player );
+const enemySelection = ref( props.enemy );
 
 // ==============================
 // Functions
@@ -36,14 +47,18 @@ function onkeydown( e ) {
 
   if ( e.key == 'a' && playerSelection.value > 1 ) {
     playerSelection.value--;
-  } else if ( e.key == 'd' && playerSelection.value < totPlayers ) {
+    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value } );
+  } else if ( e.key == 'd' && playerSelection.value < props.imgs.length ) {
     playerSelection.value++;
+    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value });
   }
 
   if ( e.key == 'ArrowLeft' && enemySelection.value > 1 ) {
     enemySelection.value--;
-  } else if ( e.key == 'ArrowRight' && enemySelection.value < totPlayers ) {
+    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value });
+  } else if ( e.key == 'ArrowRight' && enemySelection.value < props.imgs.length ) {
     enemySelection.value++;
+    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value });
   }
 }
 
@@ -67,8 +82,6 @@ onUnmounted(() => {
   border-radius: 8px;
   cursor: pointer;
   box-sizing: border-box;
-  background-image: url('https://picsum.photos/id/80/80');
-  background-size: cover;
   background-repeat: no-repeat;
 
   &:hover {
@@ -86,7 +99,4 @@ onUnmounted(() => {
     outline: 4px solid blue;
   }
 }
-
-// se muovo a-d seleziona active orange
-// se muovo left-right seleziona active blue
 </style>

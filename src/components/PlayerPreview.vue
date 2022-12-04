@@ -1,5 +1,12 @@
 <template>
-  <div class="player-img" :style="{ 'background-image' : 'url('+ src +')' }"></div>
+  <div class="preview-wrapper"
+  :style="{ 
+   'background-image' : 'url('+ img.src +')',
+    'background-position' : img.position,
+    'background-size' : img.zoom
+  }"
+  >
+  </div>
 </template>
 
 <script setup>
@@ -7,17 +14,16 @@
 // Props
 // ==============================
 const props = defineProps({
-  src: String,
+  img: Object,
 });
 </script>
 
 <style lang="scss" scoped>
-.player-img {
+.preview-wrapper {
     height: 300px;
     border: 2px solid #222;
     border-radius: 12px;
     margin: 22px;
-    background-size: 150%;
-    background-position: 50%;
+    background-repeat: no-repeat;
 }
 </style>

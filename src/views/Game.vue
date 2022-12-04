@@ -342,7 +342,7 @@ function drawDecoration({ obj, x_pos, y_pos, scale, speed }) {
     obj,
     obj.i * frameWidth, // cropping X (each iteration, scroll horizontally by a frame)
     0, // cropping Y (remain the same)
-    obj.width / obj.max_frames,
+    frameWidth,
     obj.height,
     x_pos, // X position on the canvas of the whole image
     y_pos, // Y position on the canvas of the whole image
@@ -377,11 +377,11 @@ function drawAnimation({ user, animation, speed = 15, idle_after = false, stop_a
     animation.image,
     animation.i * frameWidth,
     0,
-    animation.width / animation.total,
+    frameWidth,
     animation.height,
     user.position.x - 280,
     user.position.y - 280,
-    (animation.width / animation.total) * 3,
+    frameWidth * 3,
     animation.height * 3
   );
 

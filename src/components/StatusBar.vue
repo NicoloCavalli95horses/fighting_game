@@ -1,12 +1,18 @@
 <template>
   <div class="box-wrapper">
     <template v-for="n in MAX" :key="n">
-      <div class="box" :class="{ 'filled': (val * MAX) / max >= n }"></div>
+      <div class="box" :class="{ 'filled': ((val * MAX) / max >= n) && timeCount >= n }"></div>
     </template>
   </div>
 </template>
 
 <script setup>
+// ==============================
+// Import
+// ==============================
+import { onMounted, onUnmounted, ref, watch } from "@vue/runtime-core";
+
+
 // ==============================
 // Props
 // ==============================
@@ -19,6 +25,30 @@ const props = defineProps({
 // Consts
 // ==============================
 const MAX = 20;
+const timeCount = ref( 0 );
+let interval = null;
+
+// ==============================
+// Watchers
+// ==============================
+watch( timeCount, ( time ) => {
+  if ( time >= 50 ) {
+    clearInterval( interval );
+  }
+})
+
+// ==============================
+// Life cycle
+// ==============================
+onMounted(() => {
+  interval = setInterval( () => {
+    timeCount.value++;
+  }, 100)
+})
+
+onUnmounted(() => {
+  clearInterval( interval );
+})
 </script>
 
 <style lang="scss" scoped>
@@ -36,4 +66,5 @@ const MAX = 20;
     }
   }
 }
+
 </style>

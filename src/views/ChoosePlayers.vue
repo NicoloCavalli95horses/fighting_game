@@ -3,7 +3,7 @@
     <section class="preview">
       <div class="left">
         <h1>Player 1</h1>
-        <PlayerPreview src="src/assets/img/characters/samuraiMack/preview.png" />
+        <PlayerPreview :img="players_preview[ playerID - 1 ]" />
         <PlayerStatus
           :title="store.getPlayerName('player')"
           :strenght="store.getPlayerStrenght('player')"
@@ -12,7 +12,7 @@
       </div>
       <div class="right">
         <h1>Player 2</h1>
-        <PlayerPreview src="src/assets/img/characters/kenji/preview.png" />
+        <PlayerPreview :img="players_preview[ enemyID - 1 ]" />
         <PlayerStatus
           :title="store.getPlayerName('enemy')"
           :strenght="store.getPlayerStrenght('enemy')"
@@ -23,7 +23,7 @@
 
     <section class="players">
       <div class="players-box">
-        <PlayerSelection />
+        <PlayerSelection :imgs="players_boxes" :player="playerID" :enemy="enemyID" @keydown="(ids) => onPlayerChoose(ids)" />
       </div>
     </section>
 
@@ -43,11 +43,38 @@ import Btn from "../components/Btn.vue";
 import PlayerPreview from "../components/PlayerPreview.vue";
 import PlayerStatus from "../components/PlayerStatus.vue";
 import PlayerSelection from "../components/PlayerSelection.vue";
+import { ref } from "@vue/reactivity";
+import { onMounted } from "@vue/runtime-core";
 
 // ==============================
 // Consts
 // ==============================
 const store = Store();
+const players_boxes = [
+  { id: 1, src: 'src/assets/img/characters/kenji/preview.png', zoom: '450%', position: '48% 74%' },
+  { id: 2, src: 'src/assets/img/characters/samuraiMack/preview.png', zoom: '400%', position: '50% 75%' },
+  { id: 3, src: 'src/assets/img/characters/kunoichi/preview.png', zoom: '400%', position: '47% 64%' },
+  { id: 4, src: 'src/assets/img/characters/peasant/preview.png', zoom: '350%', position: '47% 39%' },
+]
+
+const players_preview = [
+  { id: 1, src: 'src/assets/img/characters/kenji/preview.png', zoom: '130%', position: '50% 120%' },
+  { id: 2, src: 'src/assets/img/characters/samuraiMack/preview.png', zoom: '130%', position: '50% 110%' },
+  { id: 3, src: 'src/assets/img/characters/kunoichi/preview.png', zoom: '100%', position: '50% 140%' },
+  { id: 4, src: 'src/assets/img/characters/peasant/preview.png', zoom: '100%', position: '50% 100%' },
+]
+
+const playerID = ref(1);
+const enemyID = ref(2);
+
+// ==============================
+// Functions
+// ==============================
+function onPlayerChoose( ids ) {
+  playerID.value = ids.player;
+  enemyID.value = ids.enemy;
+}
+
 </script>
 
 <style lang="scss" scoped>
