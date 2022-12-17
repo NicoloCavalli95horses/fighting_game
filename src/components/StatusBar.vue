@@ -26,14 +26,26 @@ const props = defineProps({
 // ==============================
 const MAX = 20;
 const timeCount = ref( 0 );
-let interval = null;
+const interval = ref( undefined );
 
 // ==============================
 // Watchers
 // ==============================
 watch( timeCount, ( time ) => {
   if ( time >= 50 ) {
-    clearInterval( interval );
+    clearInterval( interval.value );
+  }
+})
+
+watch( 
+  () => props.val, 
+  ( val ) => {
+  if ( val ) {
+    clearInterval( interval.value );
+    timeCount.value = null;
+    interval.value = setInterval( () => {
+      timeCount.value++;
+    }, 100)
   }
 })
 
@@ -41,13 +53,13 @@ watch( timeCount, ( time ) => {
 // Life cycle
 // ==============================
 onMounted(() => {
-  interval = setInterval( () => {
+  interval.value = setInterval( () => {
     timeCount.value++;
   }, 100)
 })
 
 onUnmounted(() => {
-  clearInterval( interval );
+  clearInterval( interval.value );
 })
 </script>
 

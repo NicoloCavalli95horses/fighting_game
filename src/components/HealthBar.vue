@@ -2,7 +2,7 @@
   <div class="relative"></div>
   <div class="wrapper">
     <div>
-      <h2>{{ store.getPlayerName('player') }}</h2>
+      <h2>{{ player.name }}</h2>
       <meter
         class="health"
         :min="0"
@@ -10,15 +10,15 @@
         :low="30"
         :high="50"
         :optimum="70"
-        :value="store.getPlayerHealth('player')"
+        :value="playerHealth"
       />
-      <h4>{{ store.getPlayerHealth('player') }}%</h4>
+      <h4>{{ playerHealth }} % </h4>
     </div>
 
-    <Clock v-if="show_clock" />
+    <Clock />
 
     <div>
-      <h2>{{ store.getPlayerName('enemy') }}</h2>
+      <h2>{{ enemy.name }}</h2>
       <meter
         class="health"
         :min="0"
@@ -26,9 +26,9 @@
         :low="30"
         :high="50"
         :optimum="70"
-        :value="store.getPlayerHealth('enemy')"
+        :value="enemyHealth"
       />
-      <h4>{{ store.getPlayerHealth('enemy') }}%</h4>
+      <h4>{{ enemyHealth }}%</h4>
     </div>
   </div>
 </template>
@@ -39,40 +39,48 @@
 // ==============================
 import Clock from "./Clock.vue";
 import { Store } from "@/stores/store";
-import { watch } from "@vue/runtime-core";
+import { ref, watch } from "@vue/runtime-core";
+
+// ==============================
+// Props
+// ==============================
+const props = defineProps({
+  player: Object,
+  enemy: Object
+})
+
+const emits = defineEmits([ 'death' ])
 
 // ==============================
 // Variables
 // ==============================
 const store = Store();
+const playerHealth = ref( props.player.health );
+const enemyHealth = ref( props.enemy.health );
 
 // ==============================
-// Props
-// ==============================
-defineProps({
-  show_clock: Boolean
-})
-
-// ==============================
-// Watcher
+// Watchers
 // ==============================
 watch(
-  () => store.getPlayerHealth('player'),
+  () => props.player.health,
   ( health ) => {
-    if ( health <= 0 ) {
-      store.setWinner('enemy');
+    playerHealth.value = health;
+    if ( playerHealth.value <= 0 ) {
+      emits('death', 'player');
     }
   }
 );
 
 watch(
-  () => store.getPlayerHealth('enemy'),
+  () => props.enemy.health,
   ( health ) => {
-    if ( health <= 0 ) {
-      store.setWinner('player');
+    enemyHealth.value = health;
+    if ( enemyHealth.value <= 0 ) {
+      emits('death', 'enemy');
     }
   }
 );
+
 </script>
 
 <style lang="scss" scoped>

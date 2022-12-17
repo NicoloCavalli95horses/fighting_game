@@ -12,7 +12,7 @@
     </div>
   </template>
 
-  <template v-if="winner">
+  <template v-if="win">
     <div class="absolute">
       <div class="flex-column">
         <h1>{{ winner }} wins!</h1>
@@ -26,7 +26,6 @@
   </template>
 
   <template v-if="timeout">
-    <template v-if="store.getPlayerHealth('player') === store.getPlayerHealth('enemy')">
       <div class="absolute">
         <div class="flex-column">
           <h1>It's a tie</h1>
@@ -38,25 +37,6 @@
         </div>
       </div>
   </template>
-
-    <template v-else>
-      <div class="absolute">
-        <div class="flex-column">
-          <h1>{{ 
-          store.getPlayerHealth('player') > store.getPlayerHealth('enemy')
-            ? store.getPlayerName('player')
-            : store.getPlayerName('enemy')
-           }} wins!</h1>
-          <div class="top-12 flex-center">
-            <RouterLink to="/">
-              <Btn text="Menu" />
-            </RouterLink>
-          </div>
-        </div>
-      </div>    
-    </template>
-  </template>
-
 </template>
 
 <script setup>
@@ -69,12 +49,19 @@ import { onMounted, onUnmounted, ref, watch } from "@vue/runtime-core";
 import { RouterLink, RouterView } from "vue-router";
 
 // ==============================
+// Props
+// ==============================
+const props = defineProps({
+  winner: String,
+})
+
+// ==============================
 // Variables
 // ==============================
 const store = Store();
-const winner = ref( false );
 const pause = ref( false );
 const timeout = ref( false );
+const win = ref( undefined ); 
 
 // ==============================
 // Watcher
@@ -84,16 +71,16 @@ const timeout = ref( false );
 watch(
   () => store.getFightTime,
   ( time ) => {
-    timeout.value = time == "timeout" ? true : false
+    timeout.value = ( time == "timeout" )? true : false
     document.removeEventListener("keydown", handleKeyDown);
   }
 );
 
 // Watch winner
 watch(
-  () => store.getWinner,
+  () => props.winner,
   ( player ) => {
-    winner.value = player
+    win.value = player;
     document.removeEventListener("keydown", handleKeyDown);
   }
 );

@@ -1,7 +1,11 @@
 <template>
-  <Winner />
-  <HealthBar :show_clock="true" />
-  <canvas />
+  <Winner :winner="winner" />
+  <HealthBar
+    :player="{ name: player.name, health : player.health }"
+    :enemy="{ name: enemy.name, health: enemy.health }"
+    @death="( user ) => onUserDeath( user )"
+  />
+  <canvas  />
 </template>
 
 <script setup>
@@ -17,10 +21,21 @@ import {
   onUnmounted,
   watch,
   ref,
+  reactive,
 } from "@vue/runtime-core";
 
 // ==============================
-// Variables
+// Props
+// ==============================
+const props = defineProps({
+  player: Object,
+  enemy: Object,
+});
+
+// Structure of a player (to be listed)
+
+// ==============================
+//  Variables
 // ==============================
 const store = Store();
 let interval = null;
@@ -28,6 +43,10 @@ const pause_loop = ref();
 const frame = ref(0);
 const canvas = ref();
 const ctx = ref();
+const player = reactive( props.player );
+const enemy = reactive( props.enemy );
+const winner = ref( null );
+const timeout = ref( null );
 
 // Canvas background
 const background = new Image();
@@ -45,21 +64,25 @@ shop.i = 1;
 // Life cycle
 // ==============================
 onMounted(() => {
-  canvas.value = document.querySelector( "canvas" );
-  ctx.value = canvas.value.getContext( "2d" );
+  canvas.value = document.querySelector("canvas");
+  ctx.value = canvas.value.getContext("2d");
   canvas.value.width = window.innerWidth;
   canvas.value.height = window.innerHeight;
 
+  // Set players initial position
+  player.position.x = player.width * 2;
+  enemy.position.x = window.innerWidth - enemy.width * 2;
+
   // Listen to keyboard event
-  onKeyboard( store.getPlayer, store.getEnemy );
+  onKeyboard( player, enemy );
 
   // Main game loop
-  interval = setInterval( updateCanvas, store.getFramerate );
+  interval = setInterval(updateCanvas, store.getFramerate);
 });
 
 // Stop loop and reset store properties
-onUnmounted( () => {
-  clearInterval( interval );
+onUnmounted(() => {
+  clearInterval(interval);
   store.$reset();
 });
 
@@ -68,31 +91,30 @@ onUnmounted( () => {
 // ==============================
 function updateCanvas() {
   if ( !pause_loop.value ) {
-    
     // Draw background and decorations
     drawBackground();
-    drawDecoration({ 
+    drawDecoration({
       obj: shop,
-      x_pos: 1000,
-      y_pos: 240,
+      x_pos: window.innerWidth * 0.6,
+      y_pos: window.innerHeight * 0.45,
       scale: 3,
-      speed: 15 
+      speed: 15,
     });
 
     // Draw the players (handle: gravity, attackBox, jumping, left/right, screen borders,)
-    drawPlayer({ user: store.getPlayer });
-    drawPlayer({ user: store.getEnemy });
+    drawPlayer({ user: player });
+    drawPlayer({ user: enemy });
 
-    handleDirection({ 
-      player: store.getPlayer,
-      enemy: store.getEnemy
+    handleDirection({
+      player: player,
+      enemy: enemy,
     });
 
     // Handle collisions and subtract health if time is not out
     reactToCollision({
-      player: store.getPlayer,
-      enemy: store.getEnemy,
-      time: store.getFightTime
+      player: player,
+      enemy: enemy,
+      time: store.getFightTime,
     });
 
     // Update frame count
@@ -107,17 +129,17 @@ function updateCanvas() {
  * @param {Object} time
  */
 function reactToCollision({ player, enemy, time }) {
-  if ( detectCollision( player, enemy ) && player.canAttack && time != "timeout" ) {
+  if (detectCollision(player, enemy) && player.canAttack && time != "timeout") {
     player.canAttack = false;
     enemy.state = "hit";
-    if (enemy.health >= player.strenght) {
+    if ( enemy.health >= player.strenght ) {
       enemy.health -= player.strenght;
     } else {
       enemy.health = 0;
     }
   }
 
-  if ( detectCollision( enemy, player ) && enemy.canAttack && time != "timeout" ) {
+  if (detectCollision(enemy, player) && enemy.canAttack && time != "timeout") {
     enemy.canAttack = false;
     player.state = "hit";
     if ( player.health >= enemy.strenght ) {
@@ -162,9 +184,8 @@ function drawPlayer({ user }) {
  * @param { Object } enemy
  * Handle keyboard event for a user
  */
-function onKeyboard( player, enemy ) { 
-
-  window.addEventListener( "keydown", e => {
+function onKeyboard( player, enemy ) {
+  window.addEventListener("keydown", (e) => {
     if ( player.isDead || enemy.isDead ) {
       return;
     }
@@ -176,7 +197,7 @@ function onKeyboard( player, enemy ) {
   window.addEventListener("keyup", (e) => {
     if ( player.isDead || enemy.isDead ) {
       return;
-    } 
+    }
 
     if ( e.key == player.keys.left || e.key == player.keys.right ) {
       player.state = "idle";
@@ -195,70 +216,84 @@ function onKeyboard( player, enemy ) {
 /**
  * Handle keyboard events
  * @param {string} key
- * @param {user} object 
+ * @param {user} object
  */
-function handleKey({ key, user }){
+function handleKey({ key, user }) {
   switch ( key ) {
-      // Left
-      case user.keys.left:
-          user.velocity.x = -5;
-          user.lastKey = key;
-        break;
-      
-      // Right
-      case user.keys.right:
-          user.velocity.x = 5;
-          user.lastKey = key;
-        break;
+    // Left
+    case user.keys.left:
+      user.velocity.x = -5;
+      user.lastKey = key;
+      break;
 
-      // Up
-      case user.keys.up:
-        if ( user.position.y > window.innerHeight / 2 ) {
-          user.velocity.y = -20;
-        }
-          user.lastKey = key;
-        break;
+    // Right
+    case user.keys.right:
+      user.velocity.x = 5;
+      user.lastKey = key;
+      break;
 
-      // Attack
-      case user.keys.attack:
-          user.state = "attacking";
-          user.lastKey = key;
-        break;
-    }
+    // Up
+    case user.keys.up:
+      if (user.position.y > window.innerHeight / 2) {
+        user.velocity.y = -20;
+      }
+      user.lastKey = key;
+      break;
+
+    // Attack
+    case user.keys.attack:
+      user.state = "attacking";
+      user.lastKey = key;
+      break;
+  }
 }
 
 /**
  * Set user state between "jumping, falling, running, idle, dead" and draw animation
- * @param {Object} user 
+ * @param {Object} user
  */
 function setStateAndAnimate( user ) {
   if ( user.velocity.y < 0 ) {
-      user.state = "jumping";
-      drawAnimation({ user, animation: user.animation.jump });
-    } else if ( user.lastKey == user.keys.left || user.lastKey == user.keys.right ) {
-      user.state = "running"
-      drawAnimation({ user, animation: user.animation.run });
-    } else if ( user.position.y < 535 ) {
-      user.state = "falling";
-      drawAnimation({ user, animation: user.animation.fall });
-    } else if ( user.state != "attacking" && user.state != "hit" && user.state != "dead") {
-      user.state = "idle";
-      drawAnimation({ user, animation: user.animation.idle });
-    }
-    
-    if ( user.health <= 0 ) {
-      user.state = "dead";
-      drawAnimation({ user, animation: user.animation.death, stop_after: true });
-    }
+    user.state = "jumping";
+    drawAnimation({ user, animation: user.animation.jump });
+  } else if ( user.lastKey == user.keys.left || user.lastKey == user.keys.right ) {
+    user.state = "running";
+    drawAnimation({ user, animation: user.animation.run });
+  } else if ( user.position.y < 535 ) {
+    user.state = "falling";
+    drawAnimation({ user, animation: user.animation.fall });
+  } else if (
+    user.state != "attacking" &&
+    user.state != "hit" &&
+    user.state != "dead"
+  ) {
+    user.state = "idle";
+    drawAnimation({ user, animation: user.animation.idle });
+  }
 
-    if ( user.state == "attacking" ) {
-      // drawAttackBox();
-      drawAnimation({ user, animation: user.animation.attack, speed: 10, idle_after: true });
-    } 
+  if ( user.health <= 0 ) {
+    user.state = "dead";
+    drawAnimation({ user, animation: user.animation.death, stop_after: true });
+  }
 
-    if ( user.state == "hit" ) {
-      drawAnimation({ user, animation: user.animation.hit, speed: 20, idle_after: true });
-    }
+  if ( user.state == "attacking" ) {
+    // drawAttackBox();
+    drawAnimation({
+      user,
+      animation: user.animation.attack,
+      speed: 10,
+      idle_after: true,
+    });
+  }
+
+  if (user.state == "hit") {
+    drawAnimation({
+      user,
+      animation: user.animation.hit,
+      speed: 20,
+      idle_after: true,
+    });
+  }
 }
 
 /**
@@ -285,8 +320,8 @@ function handleDirection({ player, enemy }) {
 }
 
 /**
- * @param {object} player 
- * @param {object} enemy 
+ * @param {object} player
+ * @param {object} enemy
  * Return whether or not there is a collision between two players
  */
 function detectCollision(player, enemy) {
@@ -310,9 +345,9 @@ function handleAttackBox(user) {
 
 /**
  * @param {object} user
- * Display attack box for debugging purposes 
+ * Display attack box for debugging purposes
  */
-function drawAttackBox(user){
+function drawAttackBox(user) {
   ctx.value.fillRect(
     user.attackBox.position.x,
     user.attackBox.position.y,
@@ -337,7 +372,7 @@ function drawBackground() {
  * @param {Object} speed - the speed of the animation
  */
 function drawDecoration({ obj, x_pos, y_pos, scale, speed }) {
-  const frameWidth = (obj.width / obj.max_frames);
+  const frameWidth = obj.width / obj.max_frames;
   ctx.value.drawImage(
     obj,
     obj.i * frameWidth, // cropping X (each iteration, scroll horizontally by a frame)
@@ -355,23 +390,31 @@ function drawDecoration({ obj, x_pos, y_pos, scale, speed }) {
     obj.i = obj.i == obj.max_frames - 1 ? 1 : obj.i + 1; // Restart the iteration if i > max_frames
   }
 }
- 
+
 /**
  * @param {object} user - x, y position
  * @param {object} animation - src, width, height, total, i
  * @param {number} speed - fps
  * @param {boolean} idle_after - switch to idle animation after once
  */
-function drawAnimation({ user, animation, speed = 15, idle_after = false, stop_after = false }) {
-  
-  // Create 'image' key and store a new image object in it 
+function drawAnimation({
+  user,
+  animation,
+  speed = 15,
+  idle_after = false,
+  stop_after = false,
+}) {
+  // Create 'image' key and store a new image object in it
   animation.image = new Image();
 
   // Set src format
-  animation.image.src = ( user.mirror && !stop_after ) ? animation.src + "_rev.png" : animation.src + ".png";
+  animation.image.src =
+    user.mirror && !stop_after
+      ? animation.src + "_rev.png"
+      : animation.src + ".png";
 
   // Single frame width
-  const frameWidth = (animation.width / animation.total);
+  const frameWidth = animation.width / animation.total;
 
   ctx.value.drawImage(
     animation.image,
@@ -380,14 +423,14 @@ function drawAnimation({ user, animation, speed = 15, idle_after = false, stop_a
     frameWidth,
     animation.height,
     user.position.x - 280,
-    user.position.y - 280,
+    user.position.y - 100,
     frameWidth * 3,
     animation.height * 3
   );
 
   // Stop any animation ('dead' state)
-  if ( stop_after ) {
-    if ( frame.value % speed === 0 ) {
+  if (stop_after) {
+    if (frame.value % speed === 0) {
       if (animation.i == animation.total - 1) {
         return;
       } else {
@@ -396,12 +439,12 @@ function drawAnimation({ user, animation, speed = 15, idle_after = false, stop_a
     }
   } else {
     // Repeat the same animation or switch to idle default animation
-    if ( frame.value % speed === 0 ) {
-      if ( !idle_after ) {
+    if (frame.value % speed === 0) {
+      if (!idle_after) {
         // Increase counter and move to the next png frame
         animation.i = animation.i == animation.total - 1 ? 1 : animation.i + 1;
       } else {
-        if ( animation.i == ( animation.total - 1 ) ) {
+        if (animation.i == animation.total - 1) {
           animation.i = 1;
           user.state = "idle";
           user.canAttack = true;
@@ -412,6 +455,21 @@ function drawAnimation({ user, animation, speed = 15, idle_after = false, stop_a
         }
       }
     }
+  }
+}
+/**
+ * 
+ * @param {String} user 
+ */
+function onUserDeath( user ){
+  switch( user ) {
+    case 'player':
+      player.isDead = true;
+      winner.value = enemy.name;
+      break;
+    case 'enemy':
+      enemy.isDead = true;
+      winner.value = player.name;
   }
 }
 

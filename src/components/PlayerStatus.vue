@@ -1,24 +1,24 @@
 <template>
   <div class="wrapper">
-    <h3>Name: <span> {{ title }}</span> </h3>
-    <h3>Health</h3>
-    <StatusBar :val="health" :max="store.game.settings.maxValues.health" />
-    <h3>Strenght</h3>
-    <StatusBar :val="strenght" :max="store.game.settings.maxValues.strenght" />
+    <h3>Name: <span> {{ player.name }}</span> </h3>
+    <h3>Health: <span> {{ player.health }} </span></h3>
+    <StatusBar :val="player.health" :max="store.game.settings.maxValues.health" />
+    <h3>Strenght: <span> {{ player.strenght }} </span></h3>
+    <StatusBar :val="player.strenght" :max="store.game.settings.maxValues.strenght" />
   </div>
 </template>
 
 <script setup>
 import StatusBar from '../components/StatusBar.vue'
 import { Store } from "@/stores/store";
+import { onMounted } from '@vue/runtime-core';
 
 const store = Store();
 
 const props = defineProps({
-  title: String,
-  health: Number,
-  strenght: Number,
+  player: Object,
 });
+
 </script>
 
 <style lang="scss" scoped>

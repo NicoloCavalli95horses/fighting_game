@@ -1,20 +1,19 @@
 <template>
-  <div 
+  <div
     v-for="img in imgs"
     :key="img.id"
     class="sel-box"
-    :class="{ 
-      'player-active' : playerSelection == img.id && playerSelection != enemySelection,
-      'enemy-active' : enemySelection == img.id && playerSelection != enemySelection,
-      'double-active' : img.id == playerSelection && playerSelection == enemySelection
-      }"
-    :style="{ 
-      'background-image' : 'url('+ img.src +')',
-      'background-position' : img.position,
-      'background-size' : img.zoom
-       }"    
-    >
-  </div>
+    :class="{
+      'player-active': playerSelection == img.id && playerSelection != enemySelection,
+      'enemy-active': enemySelection == img.id && playerSelection != enemySelection,
+      'double-active': img.id == playerSelection && playerSelection == enemySelection,
+    }"
+    :style="{
+      'background-image': 'url(' + img.src + ')',
+      'background-position': img.position,
+      'background-size': img.zoom,
+    }"
+  ></div>
 </template>
 
 <script setup>
@@ -37,28 +36,42 @@ const emit = defineEmits(["keydown"]);
 // ==============================
 // Consts
 // ==============================
-const playerSelection = ref( props.player );
-const enemySelection = ref( props.enemy );
+const playerSelection = ref(props.player);
+const enemySelection = ref(props.enemy);
 
 // ==============================
 // Functions
 // ==============================
-function onkeydown( e ) {
-
-  if ( e.key == 'a' && playerSelection.value > 1 ) {
+function onkeydown(e) {
+  if (e.key == "a" && playerSelection.value > 1) {
     playerSelection.value--;
-    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value } );
-  } else if ( e.key == 'd' && playerSelection.value < props.imgs.length ) {
+    emit("keydown", {
+      player: playerSelection.value,
+      enemy: enemySelection.value,
+    });
+  } else if (e.key == "d" && playerSelection.value < props.imgs.length) {
     playerSelection.value++;
-    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value });
+    emit("keydown", {
+      player: playerSelection.value,
+      enemy: enemySelection.value,
+    });
   }
 
-  if ( e.key == 'ArrowLeft' && enemySelection.value > 1 ) {
+  if (e.key == "ArrowLeft" && enemySelection.value > 1) {
     enemySelection.value--;
-    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value });
-  } else if ( e.key == 'ArrowRight' && enemySelection.value < props.imgs.length ) {
+    emit("keydown", {
+      player: playerSelection.value,
+      enemy: enemySelection.value,
+    });
+  } else if (
+    e.key == "ArrowRight" &&
+    enemySelection.value < props.imgs.length
+  ) {
     enemySelection.value++;
-    emit('keydown', { player: playerSelection.value, enemy: enemySelection.value });
+    emit("keydown", {
+      player: playerSelection.value,
+      enemy: enemySelection.value,
+    });
   }
 }
 
@@ -83,10 +96,6 @@ onUnmounted(() => {
   cursor: pointer;
   box-sizing: border-box;
   background-repeat: no-repeat;
-
-  &:hover {
-    border: 4px solid white;
-  }
 
   &.player-active {
     border: 4px solid orange;

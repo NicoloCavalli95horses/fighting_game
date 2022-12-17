@@ -5,7 +5,7 @@ export const Store = defineStore({
   state: () => ({
     game: {
       settings: {
-        fightTime: 60,
+        fightTime: 5,
         frameRate: 10,
         pause: false,
         winner: "",
@@ -14,27 +14,20 @@ export const Store = defineStore({
         },
         maxValues: {
           health: 200,
-          strenght: 10,
-        }
+          strenght: 20,
+        },
+        players: {
+          player: {
+            id: '',
+          },
+          enemy: {
+            id: '',
+          },
+        },
       },
-      players: {
-        player: {
+      players: [
+        {
           name: "Samurai Mack",
-          position: {
-            x: 50,
-            y: 0,
-          },
-          velocity: {
-            x: 0,
-            y: 0,
-          },
-          keys: {
-            left: "a",
-            right: "d",
-            up: "w",
-            attack: "s",
-          },
-          lastKey: null,
           width: 50,
           height: 150,
           gravity: 0.6,
@@ -44,6 +37,7 @@ export const Store = defineStore({
           mirror: false,
           health: 100,
           strenght: 8,
+          lastKey: null,
           attackBox: {
             position: {
               x: 100,
@@ -53,6 +47,15 @@ export const Store = defineStore({
             width: 250,
             height: 50,
           },
+          position: {
+            x: 0,
+            y: 0,
+          },
+          velocity: {
+            x: 0,
+            y: 0,
+          },
+          state: 'idle',
           animation: {
             idle: {
               src: "src/assets/img/characters/samuraiMack/Idle",
@@ -105,27 +108,13 @@ export const Store = defineStore({
             },
           },
         },
-        enemy: {
+        {
           name: "Kenji",
-          position: {
-            x: window.innerWidth - 100,
-            y: 0,
-          },
-          velocity: {
-            x: 0,
-            y: 0,
-          },
-          keys: {
-            left: "ArrowLeft",
-            right: "ArrowRight",
-            up: "ArrowUp",
-            attack: "ArrowDown",
-          },
-          lastKey: null,
           width: 50,
           height: 150,
           gravity: 0.4,
           state: "idle",
+          lastKey: null,
           canAttack: true,
           isDead: false,
           mirror: false,
@@ -140,6 +129,15 @@ export const Store = defineStore({
             width: 250,
             height: 50,
           },
+          position: {
+            x: 0,
+            y: 0,
+          },
+          velocity: {
+            x: 0,
+            y: 0,
+          },
+          state: 'idle',
           animation: {
             idle: {
               src: "src/assets/img/characters/kenji/Idle",
@@ -192,60 +190,182 @@ export const Store = defineStore({
             },
           },
         },
-      },
+        {
+          name: "Kunoichi",
+          width: 50,
+          height: 150,
+          gravity: 0.4,
+          state: "idle",
+          canAttack: true,
+          isDead: false,
+          mirror: false,
+          health: 80,
+          strenght: 10,
+          lastKey: null,
+          attackBox: {
+            position: {
+              x: 100,
+              y: 100,
+            },
+            offset: 0,
+            width: 250,
+            height: 50,
+          },
+          position: {
+            x: 0,
+            y: 0,
+          },
+          velocity: {
+            x: 0,
+            y: 0,
+          },
+          state: 'idle',
+          animation: {
+            idle: {
+              src: "src/assets/img/characters/kunoichi/Idle",
+              width: 1152,
+              height: 128,
+              total: 9,
+              i: 1,
+            },
+            jump: {
+              src: "src/assets/img/characters/kunoichi/Jump",
+              width: 1280,
+              height: 128,
+              total: 10,
+              i: 1,
+            },
+            attack: {
+              src: "src/assets/img/characters/kunoichi/Attack",
+              width: 768,
+              height: 128,
+              total: 6,
+              i: 1,
+            },
+            fall: {
+              src: "src/assets/img/characters/kunoichi/Jump",
+              width: 1280,
+              height: 128,
+              total: 10,
+              i: 1,
+            },
+            run: {
+              src: "src/assets/img/characters/kunoichi/Run",
+              width: 1024,
+              height: 128,
+              total: 8,
+              i: 1,
+            },
+            death: {
+              src: "src/assets/img/characters/kunoichi/Death",
+              width: 640,
+              height: 128,
+              total: 5,
+              i: 1,
+            },
+            hit: {
+              src: "src/assets/img/characters/kunoichi/Hit",
+              width: 256,
+              height: 128,
+              total: 2,
+              i: 1,
+            },
+          },
+        },
+        {
+          name: "Toriotoko",
+          width: 50,
+          height: 150,
+          gravity: 0.4,
+          state: "idle",
+          canAttack: true,
+          isDead: false,
+          mirror: false,
+          health: 300,
+          strenght: 7,
+          lastKey: null,
+          attackBox: {
+            position: {
+              x: 100,
+              y: 100,
+            },
+            offset: 0,
+            width: 250,
+            height: 50,
+          },
+          position: {
+            x: 0,
+            y: 0,
+          },
+          velocity: {
+            x: 0,
+            y: 0,
+          },
+          state: 'idle',
+          animation: {
+            idle: {
+              src: "src/assets/img/characters/toriotoko/Idle",
+              width: 576,
+              height: 96,
+              total: 6,
+              i: 1,
+            },
+            jump: {
+              src: "src/assets/img/characters/toriotoko/Jump",
+              width: 768,
+              height: 96,
+              total: 8,
+              i: 1,
+            },
+            attack: {
+              src: "src/assets/img/characters/toriotoko/Attack",
+              width: 576,
+              height: 96,
+              total: 6,
+              i: 1,
+            },
+            fall: {
+              src: "src/assets/img/characters/toriotoko/Jump",
+              width: 768,
+              height: 96,
+              total: 8,
+              i: 1,
+            },
+            run: {
+              src: "src/assets/img/characters/toriotoko/Run",
+              width: 576,
+              height: 96,
+              total: 6,
+              i: 1,
+            },
+            death: {
+              src: "src/assets/img/characters/toriotoko/Death",
+              width: 384,
+              height: 96,
+              total: 4,
+              i: 1,
+            },
+            hit: {
+              src: "src/assets/img/characters/toriotoko/Hit",
+              width: 192,
+              height: 96,
+              total: 2,
+              i: 1,
+            },
+          },
+        },
+      ],
     },
   }),
   getters: {
-    getPlayer(){
-      return this.game.players.player
-    },
-    getEnemy(){
-      return this.game.players.enemy
-    },
-    getPlayerName() {
-      return (name) => {
-        if (name === "player") {
-          return this.game.players.player.name;
-        } else if (name === "enemy") {
-          return this.game.players.enemy.name;
+    getPlayer() {
+      return (i, property = undefined) => {
+        if ( !property ) {
+          return this.game.players[i - 1];
+        } else {
+          return this.game.players[i - 1][property];
         }
       };
-    },
-    getPlayerHealth() {
-      return (name) => {
-        if (name === "player") {
-          return this.game.players.player.health;
-        } else if (name === "enemy") {
-          return this.game.players.enemy.health;
-        }
-      };
-    },
-    getPlayerStrenght() {
-      return (player) => {
-        if (player === "player") {
-          return this.game.players.player.strenght;
-        } else if (player === "enemy") {
-          return this.game.players.enemy.strenght;
-        }
-      };
-    },
-    getPlayerGravity() {
-      return (player) => {
-        if (player === "player") {
-          return this.game.players.player.gravity;
-        } else if (player === "enemy") {
-          return this.game.players.enemy.gravity;
-        }
-      };
-    },
-    getPlayerState() {
-      return (player) => {
-        if (player === "player") {
-          return this.game.players.player.state;
-        } else if (player === "enemy") {
-          return this.game.players.enemy.state;
-        }
-      }
     },
     getFightTime() {
       return this.game.settings.fightTime;
@@ -296,14 +416,8 @@ export const Store = defineStore({
     setTogglePause(toggle = true) {
       this.game.settings.pause = toggle ? !this.game.settings.pause : false;
     },
-    setWinner(name) {
-      if (name === "player") {
-        this.game.players.enemy.isDead = true;
-        this.game.settings.winner = this.game.players.player.name;
-      } else if (name === "enemy") {
-        this.game.players.player.isDead = true;
-        this.game.settings.winner = this.game.players.enemy.name;
-      }
+    setWinner( id ) {
+      this.game.settings.winner = this.game.players[ id ].name;
     },
     setTime(time) {
       if (time == "timeout") {
