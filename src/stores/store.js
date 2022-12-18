@@ -25,7 +25,7 @@ export const Store = defineStore({
           }
         },
         maxValues: {
-          health: 200,
+          health: 180,
           strenght: 20,
           speed: 10,
         },
@@ -43,7 +43,7 @@ export const Store = defineStore({
           name: "Samurai Mack",
           width: 50,
           height: 150,
-          gravity: 0.6,
+          gravity: 0.4,
           state: "idle",
           canAttack: true,
           isDead: false,
@@ -136,7 +136,7 @@ export const Store = defineStore({
           isDead: false,
           mirror: false,
           health: 100,
-          strenght: 8,
+          strenght: 6,
           attackBox: {
             position: {
               x: 100,
@@ -220,8 +220,8 @@ export const Store = defineStore({
           canAttack: true,
           isDead: false,
           mirror: false,
-          health: 80,
-          strenght: 9,
+          health: 90,
+          strenght: 15,
           lastKey: null,
           attackBox: {
             position: {
@@ -306,8 +306,8 @@ export const Store = defineStore({
           canAttack: true,
           isDead: false,
           mirror: false,
-          health: 120,
-          strenght: 8,
+          health: 160,
+          strenght: 9,
           lastKey: null,
           attackBox: {
             position: {
@@ -399,9 +399,6 @@ export const Store = defineStore({
     getFightTime() {
       return this.game.settings.fightTime;
     },
-    getWinner() {
-      return this.game.settings.winner;
-    },
     getPauseMode() {
       return this.game.settings.pause;
     },
@@ -414,39 +411,8 @@ export const Store = defineStore({
   },
 
   actions: {
-    setPlayerName(player, name) {
-      if (player === "player") {
-        this.game.players.player.name = name;
-      } else if (player === "enemy") {
-        this.game.players.enemy.name = name;
-      }
-    },
-    setPlayerStrenght(player, strenght) {
-      if (player === "player") {
-        this.game.players.player.strenght = strenght;
-      } else if (player === "enemy") {
-        this.game.players.enemy.strenght = strenght;
-      }
-    },
-    setPlayerHealth(player, health) {
-      if (player === "player") {
-        this.game.players.player.health = health;
-      } else if (player === "enemy") {
-        this.game.players.enemy.health = health;
-      }
-    },
-    setPlayerGravity(player, gravity) {
-      if (player === "player") {
-        this.game.players.player.gravity = gravity;
-      } else if (player === "enemy") {
-        this.game.players.enemy.gravity = gravity;
-      }
-    },
     setTogglePause(toggle = true) {
       this.game.settings.pause = toggle ? !this.game.settings.pause : false;
-    },
-    setWinner( id ) {
-      this.game.settings.winner = this.game.players[ id ].name;
     },
     setTime(time) {
       if (time == "timeout") {
@@ -457,9 +423,6 @@ export const Store = defineStore({
     },
     setFramerate(val) {
       this.game.settings.frameRate = val;
-    },
-    setPauseKey(val) {
-      this.game.settings.keys.pause = val;
-    },
+    }
   },
 });

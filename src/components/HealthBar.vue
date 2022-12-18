@@ -6,13 +6,13 @@
       <meter
         class="health"
         :min="0"
-        :max="100"
+        :max="store.game.settings.maxValues.health"
         :low="30"
         :high="50"
         :optimum="70"
         :value="playerHealth"
       />
-      <h4>{{ playerHealth }} % </h4>
+      <h4>{{ playerHealth }} HP </h4>
     </div>
 
     <Clock />
@@ -22,13 +22,13 @@
       <meter
         class="health"
         :min="0"
-        :max="100"
+        :max="store.game.settings.maxValues.health"
         :low="30"
         :high="50"
         :optimum="70"
         :value="enemyHealth"
       />
-      <h4>{{ enemyHealth }}%</h4>
+      <h4>{{ enemyHealth }} HP </h4>
     </div>
   </div>
 </template>
@@ -115,7 +115,7 @@ $sub-sub-optimum: #e74c3c;
     h4 {
       text-align: center;
       letter-spacing: 5px;
-      opacity: 50%;
+      opacity: 70%;
       transform: translateY(-10px);
       font-size: 25px;
     }

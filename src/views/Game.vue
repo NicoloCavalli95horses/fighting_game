@@ -44,7 +44,7 @@ const props = defineProps({
 // isDead: false
 // keys: { left: 'a', right: 'd', up: 'w', attack: 's' } // customizable
 // lastKey: null
-// mirror: true  // handle png selection to make players always face each other
+// mirror: false  // handle png selection to make players always face each other
 // name: "Kenji"
 // position: { x: 959, y: 540 }
 // pos_correction: { x: 100, y: 200 } // handle drawing correction due to different png sizes
@@ -95,8 +95,6 @@ onMounted(() => {
   // Set players initial position
   player.position.x = player.pos_correction.x;
   enemy.position.x = window.innerWidth - enemy.pos_correction.x;
-  
-  console.log( props.player, props.enemy );
 
   // Listen to keyboard event
   onKeyboard( player, enemy );
@@ -197,7 +195,8 @@ function drawPlayer({ user }) {
   }
 
   // Do not go beyond the screen
-  if ( user.position.x + user.velocity.x >= 0 && user.position.x + user.width + user.velocity.x <= window.innerWidth ){
+  if ( user.position.x + user.velocity.x >= 0 && 
+       user.position.x + user.width + user.velocity.x <= window.innerWidth ) {
     user.position.x += user.velocity.x;
   } else {
     user.velocity.x = 0;

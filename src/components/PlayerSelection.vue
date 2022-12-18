@@ -93,7 +93,6 @@ onUnmounted(() => {
   height: 80px;
   border: 2px solid white;
   border-radius: 8px;
-  cursor: pointer;
   box-sizing: border-box;
   background-repeat: no-repeat;
 

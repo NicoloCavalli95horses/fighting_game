@@ -30,7 +30,7 @@ onMounted(() => {
   time.value = store.getFightTime;
   
   interval = setInterval(() => {
-    if (!store.getPauseMode && !store.getWinner) {
+    if ( !store.getPauseMode ) {
       if (time.value > 1) {
         time.value --;
       } else {

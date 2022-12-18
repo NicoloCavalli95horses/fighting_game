@@ -31,7 +31,7 @@
           <KeySelector
             label="pause"
             :placeholder="store.getPauseKey"
-            @update="(key) => store.setPauseKey(key)"
+            @update="(key) => store.game.settings.keys.pause = key"
           />
         </div>
       </div>

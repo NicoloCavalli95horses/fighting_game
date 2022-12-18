@@ -50,6 +50,7 @@ input[type="text"] {
   padding: 6px 8px;
   border-radius: 24px;
   border: none;
+  outline: none;
   text-align: center;
   margin-left: 10px;
 

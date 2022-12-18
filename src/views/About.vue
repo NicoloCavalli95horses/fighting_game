@@ -8,7 +8,7 @@
     </div>
   </div>
   <div class="credits">
-    <h5> Nicolò Cavalli - 2022 </h5>
+    <h5> Nicolò Cavalli · 2022 </h5>
   </div>
 </template>
 
