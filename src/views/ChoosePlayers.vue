@@ -33,8 +33,8 @@
   <!-- Game -->
   <Game
     v-else
-    :player="{ ...store.getPlayer( playerID ), keys : {...keys.player} }"
-    :enemy="{ ...store.getPlayer( enemyID ), keys : { ...keys.enemy} }"
+    :player="{ ...store.getPlayer( playerID ), keys : store.game.settings.keys.player }"
+    :enemy="{ ...store.getPlayer( enemyID ), keys : store.game.settings.keys.enemy }"
   >
   </Game>
 </template>
@@ -44,13 +44,13 @@
 // Import
 // ==============================
 import { Store } from "@/stores/store";
+import { reactive, ref } from "@vue/reactivity";
+import { onMounted } from "@vue/runtime-core";
 import Btn from "../components/Btn.vue";
 import PlayerPreview from "../components/PlayerPreview.vue";
 import PlayerStatus from "../components/PlayerStatus.vue";
 import PlayerSelection from "../components/PlayerSelection.vue";
 import Game from "../views/Game.vue";
-import { reactive, ref } from "@vue/reactivity";
-import { onMounted } from "@vue/runtime-core";
 
 // ==============================
 // Consts
@@ -113,20 +113,7 @@ const players_preview = [
 const playerID = ref(1);
 const enemyID = ref(2);
 const gameStart = ref( false );
-const keys = reactive({
-  player : {
-    left: "a",
-      right: "d",
-      up: "w",
-      attack: "s"
-  },
-  enemy: {
-      left: "ArrowLeft",
-      right: "ArrowRight",
-      up: "ArrowUp",
-      attack: "ArrowDown",
-    }
-})
+
 
 // ==============================
 // Functions
@@ -160,11 +147,11 @@ function onGameStart() {
       border-radius: 12px;
     }
     .left {
-      border: 4px solid rgba(255, 166, 0, 0.5);
+      border: 4px solid var(--orange);
     }
 
     .right {
-      border: 4px solid rgba(0, 0, 255, 0.5);
+      border: 4px solid var(--blue);
     }
 
     h1 {

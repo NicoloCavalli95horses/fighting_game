@@ -71,10 +71,10 @@ onUnmounted(() => {
   .box {
     width: 100%;
     height: 10px;
-    border: 2px solid orange;
+    border: 2px solid var(--yellow);
 
     &.filled {
-      background-color: orange;
+      background-color: var(--yellow);
     }
   }
 }

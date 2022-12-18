@@ -29,6 +29,7 @@
         <div class="row">
           <h4 class="l-24">Pause mode</h4>
           <KeySelector
+            label="pause"
             :placeholder="store.getPauseKey"
             @update="(key) => store.setPauseKey(key)"
           />
@@ -38,82 +39,60 @@
       <h3>Player 1</h3>
       <div class="flex-column">
         <div class="row">
-          <h4 class="l-24">Name</h4>
-          <InputText
-            :placeholder="store.getPlayerName('player')"
-            @update="(name) => store.setPlayerName('player', name)"
-          />
-        </div>
-
-        <div class="row">
-          <h4 class="l-24">Strenght</h4>
-          <InputRange
-            :start="store.getPlayerStrenght('player')"
-            :min="1"
-            :max="20"
-            @value="(strenght) => store.setPlayerStrenght('player', strenght)"
-          />
-        </div>
-
-        <div class="row">
-          <h4 class="l-24">Health</h4>
-          <InputRange
-            :start="store.getPlayerHealth('player')"
-            :min="1"
-            :max="store.game.settings.maxValues.health"
-            @value="(health) => store.setPlayerHealth('player', health)"
-          />
-        </div>
-
-        <div class="row">
-          <h4 class="l-24">Gravity</h4>
-          <InputRange
-            :start="store.getPlayerGravity('player') * 10"
-            :min="1"
-            :max="10"
-            @value="(gravity) => store.setPlayerGravity('player', gravity / 10)"
-          />
+          <div class="l-24 r-24">
+            <KeySelector
+              label="left"
+              :placeholder="store.game.settings.keys.player.left"
+              @update="(key) => store.game.settings.keys.player.left = key"
+            />
+            <KeySelector
+              label="right"
+              :placeholder="store.game.settings.keys.player.right"
+              @update="(key) => store.game.settings.keys.player.right = key"
+            />
+          </div>
+          <div class="l-24 r-24">
+            <KeySelector
+              label="jump"
+              :placeholder="store.game.settings.keys.player.up"
+              @update="(key) => store.game.settings.keys.player.up = key"
+            />
+            <KeySelector
+              label="attack"
+              :placeholder="store.game.settings.keys.player.attack"
+              @update="(key) => store.game.settings.keys.player.attack = key"
+            />
+          </div>
         </div>
       </div>
 
       <h3>Player 2</h3>
       <div class="flex-column">
         <div class="row">
-          <h4 class="l-24">Name</h4>
-          <InputText
-            :placeholder="store.getPlayerName('enemy')"
-            @update="(name) => store.setPlayerName('enemy', name)"
-          />
-        </div>
-
-        <div class="row">
-          <h4 class="l-24">Strenght</h4>
-          <InputRange
-            :start="store.getPlayerStrenght('enemy')"
-            :min="1"
-            :max="20"
-            @value="(strenght) => store.setPlayerStrenght('enemy', strenght)"
-          />
-        </div>
-
-        <div class="row">
-          <h4 class="l-24">Health</h4>
-          <InputRange
-            :start="store.getPlayerHealth('enemy')"
-            :min="1"
-            :max="500"
-            @value="(health) => store.setPlayerHealth('enemt', health)"
-          />
-        </div>
-
-        <div class="row">
-          <h4 class="l-24">Gravity</h4>
-          <InputRange
-            :start="store.getPlayerGravity('enemy') * 10"
-            :min="1"
-            :max="10"
-            @value="(gravity) => store.setPlayerGravity('enemy', gravity / 10)"
-          />
+          <div class="l-24 r-24">
+            <KeySelector
+              label="left"
+              :placeholder="store.game.settings.keys.enemy.left"
+              @update="(key) => store.game.settings.keys.enemy.left = key"
+            />
+            <KeySelector
+              label="right"
+              :placeholder="store.game.settings.keys.enemy.right"
+              @update="(key) => store.game.settings.keys.enemy.right = key"
+            />
+          </div>
+          <div class="l-24 r-24">
+            <KeySelector
+              label="jump"
+              :placeholder="store.game.settings.keys.enemy.up"
+              @update="(key) => store.game.settings.keys.enemy.up = key"
+            />
+            <KeySelector
+              label="attack"
+              :placeholder="store.game.settings.keys.enemy.attack"
+              @update="(key) => store.game.settings.keys.enemy.attack = key"
+            />
+          </div>
         </div>
       </div>
     </div>

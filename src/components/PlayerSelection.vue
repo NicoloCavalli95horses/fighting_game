@@ -98,14 +98,14 @@ onUnmounted(() => {
   background-repeat: no-repeat;
 
   &.player-active {
-    border: 4px solid orange;
+    border: 4px solid var(--orange);
   }
   &.enemy-active {
-    border: 4px solid blue;
+    border: 4px solid var(--blue);
   }
   &.double-active {
-    border: 4px solid orange;
-    outline: 4px solid blue;
+    border: 4px solid var(--orange);
+    outline: 4px solid var(--blue);
   }
 }
 </style>

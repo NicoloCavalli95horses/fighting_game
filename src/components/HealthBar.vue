@@ -100,12 +100,11 @@ $sub-sub-optimum: #e74c3c;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 22px;
 
   div {
     width: 100%;
     margin: 12px;
-    background-color: rgba(0, 0, 0, 0.1);
     padding: 18px;
     border-radius: 8px;
     display: flex;
@@ -117,13 +116,12 @@ $sub-sub-optimum: #e74c3c;
       text-align: center;
       letter-spacing: 5px;
       opacity: 50%;
-      transform: translateY(-52px);
+      transform: translateY(-10px);
       font-size: 25px;
     }
     meter {
       width: 100%;
       height: 75px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     meter::-webkit-meter-bar {

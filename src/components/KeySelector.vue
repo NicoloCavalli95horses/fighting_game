@@ -1,6 +1,6 @@
 <template>
   <div class="flex-center m-22">
-    <p>Press any key</p>
+    <p> {{ label }} </p>
     <input
       type="text"
       :placeholder="placeholder"
@@ -21,6 +21,7 @@ import { ref } from "@vue/reactivity";
 // Props
 // ==============================
 const props = defineProps({
+  label: String,
   placeholder: String,
 });
 
@@ -41,20 +42,19 @@ function handleKeyup( e ) {
 </script>
 
 <style lang="scss" scoped>
-$size: 50px;
 
 input[type="text"] {
   box-sizing: border-box;
-  margin: 20px;
-  max-width: calc( $size * 2);
-  height: $size;
-  border-radius: 12px;
-  outline: none;
+  width: 120px;
+  height: 40px;
+  padding: 6px 8px;
+  border-radius: 24px;
+  border: none;
   text-align: center;
+  margin-left: 10px;
 
   &::placeholder {
-    filter: grayscale(60%);
-    opacity: 0.3;
+    filter: hue-rotate(180deg);
   }
 
   &:focus {

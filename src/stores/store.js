@@ -11,6 +11,18 @@ export const Store = defineStore({
         winner: "",
         keys: {
           pause: "p",
+          player : {
+            left: "a",
+            right: "d",
+            up: "w",
+            attack: "s"
+          },
+          enemy: {
+            left: "ArrowLeft",
+            right: "ArrowRight",
+            up: "ArrowUp",
+            attack: "ArrowDown",
+          }
         },
         maxValues: {
           health: 200,
