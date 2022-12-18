@@ -33,8 +33,8 @@
   <!-- Game -->
   <Game
     v-else
-    :player="{ ...store.getPlayer(playerID), keys : {...keys.player} }"
-    :enemy="{ ...store.getPlayer(enemyID), keys : { ...keys.enemy} }"
+    :player="{ ...store.getPlayer( playerID ), keys : {...keys.player} }"
+    :enemy="{ ...store.getPlayer( enemyID ), keys : { ...keys.enemy} }"
   >
   </Game>
 </template>
@@ -59,15 +59,15 @@ const store = Store();
 const players_boxes = [
   {
     id: 1,
-    src: "src/assets/img/characters/kenji/preview.png",
-    zoom: "450%",
-    position: "48% 74%",
-  },
-  {
-    id: 2,
     src: "src/assets/img/characters/samuraiMack/preview.png",
     zoom: "400%",
     position: "50% 75%",
+  },
+  {
+    id: 2,
+    src: "src/assets/img/characters/kenji/preview.png",
+    zoom: "450%",
+    position: "52% 74%",
   },
   {
     id: 3,
@@ -86,13 +86,13 @@ const players_boxes = [
 const players_preview = [
   {
     id: 1,
-    src: "src/assets/img/characters/kenji/preview.png",
+    src: "src/assets/img/characters/samuraiMack/preview.png",
     zoom: "130%",
-    position: "50% 120%",
+    position: "50% 100%",
   },
   {
     id: 2,
-    src: "src/assets/img/characters/samuraiMack/preview.png",
+    src: "src/assets/img/characters/kenji/preview.png",
     zoom: "130%",
     position: "50% 110%",
   },
@@ -100,13 +100,13 @@ const players_preview = [
     id: 3,
     src: "src/assets/img/characters/kunoichi/preview.png",
     zoom: "100%",
-    position: "50% 140%",
+    position: "50% 120%",
   },
   {
     id: 4,
     src: "src/assets/img/characters/toriotoko/preview.png",
-    zoom: "100%",
-    position: "50% 100%",
+    zoom: "75%",
+    position: "50% 150%",
   }
 ];
 
@@ -138,10 +138,7 @@ function onPlayerChoose(ids) {
 
 function onGameStart() {
   store.setTogglePause( false );
-
   gameStart.value = true;
-  // store.game.settings.players.player.id = playerID.value - 1;
-  // store.game.settings.players.enemy.id = enemyID.value - 1;
 }
 </script>
 
@@ -158,8 +155,7 @@ function onGameStart() {
     margin: 0 22px;
     box-sizing: border-box;
     height: 100%;
-    .left,
-    .right {
+    .left, .right {
       width: 30%;
       border-radius: 12px;
     }

@@ -5,7 +5,7 @@ export const Store = defineStore({
   state: () => ({
     game: {
       settings: {
-        fightTime: 5,
+        fightTime: 100,
         frameRate: 10,
         pause: false,
         winner: "",
@@ -15,6 +15,7 @@ export const Store = defineStore({
         maxValues: {
           health: 200,
           strenght: 20,
+          speed: 10,
         },
         players: {
           player: {
@@ -50,6 +51,10 @@ export const Store = defineStore({
           position: {
             x: 0,
             y: 0,
+          },
+          pos_correction: {
+            x: 50,
+            y: 280,
           },
           velocity: {
             x: 0,
@@ -118,8 +123,8 @@ export const Store = defineStore({
           canAttack: true,
           isDead: false,
           mirror: false,
-          health: 180,
-          strenght: 5,
+          health: 100,
+          strenght: 8,
           attackBox: {
             position: {
               x: 100,
@@ -132,6 +137,10 @@ export const Store = defineStore({
           position: {
             x: 0,
             y: 0,
+          },
+          pos_correction: {
+            x: 100,
+            y: 300,
           },
           velocity: {
             x: 0,
@@ -200,7 +209,7 @@ export const Store = defineStore({
           isDead: false,
           mirror: false,
           health: 80,
-          strenght: 10,
+          strenght: 9,
           lastKey: null,
           attackBox: {
             position: {
@@ -214,6 +223,10 @@ export const Store = defineStore({
           position: {
             x: 0,
             y: 0,
+          },
+          pos_correction: {
+            x: 150,
+            y: 300,
           },
           velocity: {
             x: 0,
@@ -281,8 +294,8 @@ export const Store = defineStore({
           canAttack: true,
           isDead: false,
           mirror: false,
-          health: 300,
-          strenght: 7,
+          health: 120,
+          strenght: 8,
           lastKey: null,
           attackBox: {
             position: {
@@ -296,6 +309,10 @@ export const Store = defineStore({
           position: {
             x: 0,
             y: 0,
+          },
+          pos_correction: {
+            x: 300,
+            y: 200,
           },
           velocity: {
             x: 0,

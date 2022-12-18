@@ -20,7 +20,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .preview-wrapper {
-    height: 300px;
+    height: 250px;
     border: 2px solid #222;
     border-radius: 12px;
     margin: 22px;

@@ -32,21 +32,38 @@ const props = defineProps({
   enemy: Object,
 });
 
-// Structure of a player (to be listed)
+// ==============================
+// STRUCTURE OF A CHARACTER
+// ==============================
+// animation: {idle: {…}, jump: {…}, attack: {…}, fall: {…}, run: {…}, …}
+// attackBox: { position: {…}, offset: -200, width: 250, height: 50 }
+// canAttack: true
+// gravity: 0.4
+// health: 100  // size of the rectangle that is the common background under the character image
+// height: 150
+// isDead: false
+// keys: { left: 'a', right: 'd', up: 'w', attack: 's' } // customizable
+// lastKey: null
+// mirror: true  // handle png selection to make players always face each other
+// name: "Kenji"
+// position: { x: 959, y: 540 }
+// pos_correction: { x: 100, y: 200 } // handle drawing correction due to different png sizes
+// state: "idle"
+// strenght: 5
+// velocity: { x: 0, y: 0 }
+// width: 50
 
 // ==============================
 //  Variables
 // ==============================
 const store = Store();
+
+// Canvas and animation loop
 let interval = null;
 const pause_loop = ref();
 const frame = ref(0);
 const canvas = ref();
 const ctx = ref();
-const player = reactive( props.player );
-const enemy = reactive( props.enemy );
-const winner = ref( null );
-const timeout = ref( null );
 
 // Canvas background
 const background = new Image();
@@ -60,6 +77,12 @@ shop.height = 128;
 shop.max_frames = 6;
 shop.i = 1;
 
+// Game
+const player = reactive( {...props.player} );
+const enemy = reactive( {...props.enemy} );
+const winner = ref( undefined );
+const timeout = ref( undefined );
+
 // ==============================
 // Life cycle
 // ==============================
@@ -70,8 +93,10 @@ onMounted(() => {
   canvas.value.height = window.innerHeight;
 
   // Set players initial position
-  player.position.x = player.width * 2;
-  enemy.position.x = window.innerWidth - enemy.width * 2;
+  player.position.x = player.pos_correction.x;
+  enemy.position.x = window.innerWidth - enemy.pos_correction.x;
+  
+  console.log( props.player, props.enemy );
 
   // Listen to keyboard event
   onKeyboard( player, enemy );
@@ -95,8 +120,8 @@ function updateCanvas() {
     drawBackground();
     drawDecoration({
       obj: shop,
-      x_pos: window.innerWidth * 0.6,
-      y_pos: window.innerHeight * 0.45,
+      x_pos: window.innerWidth - 600,
+      y_pos: window.innerHeight - 500,
       scale: 3,
       speed: 15,
     });
@@ -302,7 +327,7 @@ function setStateAndAnimate( user ) {
  * @param {Object} enemy
  */
 function handleDirection({ player, enemy }) {
-  if (player.position.x >= enemy.position.x) {
+  if ( player.position.x >= enemy.position.x ) {
     player.attackBox.offset = -200;
     player.mirror = true;
   } else {
@@ -310,12 +335,12 @@ function handleDirection({ player, enemy }) {
     player.mirror = false;
   }
 
-  if (enemy.position.x >= player.position.x) {
+  if ( enemy.position.x >= player.position.x ) {
     enemy.attackBox.offset = -200;
-    enemy.mirror = false;
+    enemy.mirror = true;
   } else {
     enemy.attackBox.offset = 0;
-    enemy.mirror = true;
+    enemy.mirror = false;
   }
 }
 
@@ -423,7 +448,7 @@ function drawAnimation({
     frameWidth,
     animation.height,
     user.position.x - 280,
-    user.position.y - 100,
+    user.position.y - user.pos_correction.y,
     frameWidth * 3,
     animation.height * 3
   );
@@ -478,6 +503,6 @@ function onUserDeath( user ){
 // ==============================
 watch(
   () => store.getPauseMode,
-  (pause) => (pause_loop.value = pause)
+  (pause) => pause_loop.value = pause
 );
 </script>
