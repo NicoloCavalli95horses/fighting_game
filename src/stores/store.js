@@ -48,7 +48,7 @@ export const Store = defineStore({
           canAttack: true,
           isDead: false,
           mirror: false,
-          health: 100,
+          health: 110,
           strenght: 8,
           lastKey: null,
           attackBox: {
@@ -136,7 +136,7 @@ export const Store = defineStore({
           isDead: false,
           mirror: false,
           health: 100,
-          strenght: 6,
+          strenght: 7,
           attackBox: {
             position: {
               x: 100,
@@ -221,7 +221,7 @@ export const Store = defineStore({
           isDead: false,
           mirror: false,
           health: 90,
-          strenght: 15,
+          strenght: 12,
           lastKey: null,
           attackBox: {
             position: {

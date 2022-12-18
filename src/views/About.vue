@@ -13,7 +13,11 @@
 </template>
 
 <script setup>
+// ==============================
+// Imports
+// ==============================
 import { RouterLink, RouterView } from "vue-router";
+
 </script>
 
 <style lang="scss" scoped>

@@ -42,7 +42,7 @@ import { Store } from "@/stores/store";
 import { ref, watch } from "@vue/runtime-core";
 
 // ==============================
-// Props
+// Props and emits
 // ==============================
 const props = defineProps({
   player: Object,

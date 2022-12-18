@@ -6,7 +6,6 @@
     :class="{
       'player-active': playerSelection == img.id && playerSelection != enemySelection,
       'enemy-active': enemySelection == img.id && playerSelection != enemySelection,
-      'double-active': img.id == playerSelection && playerSelection == enemySelection,
     }"
     :style="{
       'background-image': 'url(' + img.src + ')',
@@ -43,14 +42,26 @@ const enemySelection = ref(props.enemy);
 // Functions
 // ==============================
 function onkeydown(e) {
-  if (e.key == "a" && playerSelection.value > 1) {
-    playerSelection.value--;
+  if ( e.key == "a" && playerSelection.value > 1 ) {
+    if ( playerSelection.value - 1 != enemySelection.value ) {
+      playerSelection.value--;
+    } else if ( playerSelection.value - 2 >= 1 ) {
+      playerSelection.value = playerSelection.value - 2;
+    } else { 
+      return
+    }
     emit("keydown", {
       player: playerSelection.value,
       enemy: enemySelection.value,
     });
-  } else if (e.key == "d" && playerSelection.value < props.imgs.length) {
-    playerSelection.value++;
+  } else if ( e.key == "d" && playerSelection.value < props.imgs.length ) {
+    if ( playerSelection.value + 1 != enemySelection.value ) {
+      playerSelection.value++;
+    } else if ( playerSelection.value + 2 <= props.imgs.length ) {
+      playerSelection.value = playerSelection.value + 2;
+    } else {
+      return
+    }
     emit("keydown", {
       player: playerSelection.value,
       enemy: enemySelection.value,
@@ -58,16 +69,25 @@ function onkeydown(e) {
   }
 
   if (e.key == "ArrowLeft" && enemySelection.value > 1) {
-    enemySelection.value--;
+    if ( enemySelection.value - 1 != playerSelection.value ) {
+      enemySelection.value--;
+    } else if ( enemySelection.value - 2 >= 1 ) {
+      enemySelection.value = enemySelection.value - 2;
+    } else { 
+      return
+    }
     emit("keydown", {
       player: playerSelection.value,
       enemy: enemySelection.value,
     });
-  } else if (
-    e.key == "ArrowRight" &&
-    enemySelection.value < props.imgs.length
-  ) {
-    enemySelection.value++;
+  } else if ( e.key == "ArrowRight" && enemySelection.value < props.imgs.length ) {
+    if ( enemySelection.value + 1 != playerSelection.value ) {
+      enemySelection.value++;
+    } else if ( enemySelection.value + 2 <= props.imgs.length ) {
+      enemySelection.value = enemySelection.value + 2;
+    } else {
+      return
+    }
     emit("keydown", {
       player: playerSelection.value,
       enemy: enemySelection.value,
@@ -101,10 +121,6 @@ onUnmounted(() => {
   }
   &.enemy-active {
     border: 4px solid var(--blue);
-  }
-  &.double-active {
-    border: 4px solid var(--orange);
-    outline: 4px solid var(--blue);
   }
 }
 </style>

@@ -109,7 +109,12 @@ import InputRange from "../components/InputRange.vue";
 import InputText from "../components/InputText.vue";
 import Btn from "../components/Btn.vue";
 import KeySelector from "../components/KeySelector.vue";
+
+// ==============================
+// Variables
+// ==============================
 const store = Store();
+
 </script>
 
 <style lang="scss" scoped>
