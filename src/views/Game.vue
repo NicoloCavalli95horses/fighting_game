@@ -67,11 +67,11 @@ const ctx = ref();
 
 // Canvas background
 const background = new Image();
-background.src = "src/assets/img/background/background.png";
+background.src = "/img/background/background.png";
 
 // Decoration image (utilities keys are added to image obj)
 const shop = new Image();
-shop.src = "src/assets/img/decorations/shop.png";
+shop.src = "/img/decorations/shop.png";
 shop.width = 708;
 shop.height = 128;
 shop.max_frames = 6;

@@ -59,25 +59,25 @@ const store = Store();
 const players_boxes = [
   {
     id: 1,
-    src: "src/assets/img/characters/samuraiMack/preview.png",
+    src: "/img/characters/samuraiMack/preview.png",
     zoom: "400%",
     position: "50% 75%",
   },
   {
     id: 2,
-    src: "src/assets/img/characters/kenji/preview.png",
+    src: "/img/characters/kenji/preview.png",
     zoom: "450%",
     position: "52% 74%",
   },
   {
     id: 3,
-    src: "src/assets/img/characters/kunoichi/preview.png",
+    src: "/img/characters/kunoichi/preview.png",
     zoom: "400%",
     position: "47% 64%",
   },
   {
     id: 4,
-    src: "src/assets/img/characters/toriotoko/preview.png",
+    src: "/img/characters/toriotoko/preview.png",
     zoom: "350%",
     position: "47% 39%",
   }
@@ -86,25 +86,25 @@ const players_boxes = [
 const players_preview = [
   {
     id: 1,
-    src: "src/assets/img/characters/samuraiMack/preview.png",
+    src: "/img/characters/samuraiMack/preview.png",
     zoom: "130%",
     position: "50% 100%",
   },
   {
     id: 2,
-    src: "src/assets/img/characters/kenji/preview.png",
+    src: "/img/characters/kenji/preview.png",
     zoom: "130%",
     position: "50% 110%",
   },
   {
     id: 3,
-    src: "src/assets/img/characters/kunoichi/preview.png",
+    src: "/img/characters/kunoichi/preview.png",
     zoom: "100%",
     position: "50% 120%",
   },
   {
     id: 4,
-    src: "src/assets/img/characters/toriotoko/preview.png",
+    src: "/img/characters/toriotoko/preview.png",
     zoom: "75%",
     position: "50% 150%",
   }
